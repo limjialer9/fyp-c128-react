@@ -1,0 +1,20 @@
+.container{
+    display:flex
+}
+
+.main{
+    flex: 6;
+}
+
+.link {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+  }
+  .link:hover {
+     color: rgb(81, 15, 180);
+     transition: color 0.7s
+  }
+
+::-webkit-scrollbar {
+    display: none;
+}

@@ -1,0 +1,123 @@
+.mps{
+    flex:5;
+}
+
+.slider{
+    width:90%
+}
+
+.slider2{
+    padding:15px 10px;
+    width:100%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+}
+
+.slider3{
+  flex: 1;
+  margin: 20px 20px;
+  padding: 30px;
+}
+.slider4{
+  display:flex;
+  padding-top: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.featured {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+}
+
+.featuredItem {
+  flex: 1;
+  margin: 0px 20px;
+  padding: 30px;
+  border-radius: 10px;
+  cursor: default;
+  -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  overflow-y: scroll;
+}
+
+.featuredItem2 {
+  flex: 1;
+  margin: 0px 20px;
+  padding: 30px;
+  border-radius: 10px;
+  height: 450px;
+  cursor:default;
+}
+
+.featuredItem3 {
+  flex: 1;
+  margin: 0px 20px;
+  padding-top: 20px;
+  border-radius: 10px;
+  cursor: default;
+  -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  overflow-y: scroll;
+}
+
+.featuredItem4 {
+  flex: 1;
+  margin: 0px 20px;
+  margin-left: 5%;
+  padding-top: 20px;
+  border-radius: 10px;
+  cursor: default;
+  -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  overflow-y: scroll;
+}
+
+.featuredTitle{
+    font-size: 20px;
+}
+
+.featuredTitle2{
+  font-size: 20px;
+  padding-left: 20px;
+  position: sticky;
+  top:0
+}
+
+.tableContainer{
+  background-color: #b1b1b1;
+  height: 50vh;
+  width:100%;
+  overflow-y: scroll;
+}
+
+.TreePositioning{
+  margin:auto;
+  position: relative;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.loader {
+  border: 12px solid #f3f3f3; /* Light grey */
+  border-top: 12px solid #AD6ADF; /* Blue */
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.sticky{
+  position: "sticky";
+  left: 0;
+}
