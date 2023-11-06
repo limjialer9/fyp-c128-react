@@ -1,17 +1,11 @@
-import React from 'react'
-import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import './Home.css';
-import Papa from 'papaparse';
+import React from 'react';
+// import { useState , useEffect} from 'react';
+// import Button from '@mui/material/Button';
+import './projectinfo.css'
 
-export default function Home() {
+export default function Projectinfo() {
 
-    const [isOpen, setIsOpen] = useState(true);
-    const [content, setContent] = useState(false);
-    const [data, setData] = useState();
-    const [columnArray, setColumn] = useState();
-    const [valuesArray, setValues] = useState();
-
+    /*
     const Popup = props => {
         return (
             <div className="popup-box">
@@ -23,50 +17,8 @@ export default function Home() {
         );
     };
 
-    const handleFile = (event) => (
-        Papa.parse(event.target.files[0], {
-            header: true,
-            skipEmptyLines: true,
-            complete: function (result) {
-                const columnArray = [];
-                const valuesArray = [];
-
-                result.data.map((d) => {
-                    columnArray.push(Object.keys(d));
-                    valuesArray.push(Object.values(d))
-                });
-                setData(result.data);
-                setColumn(columnArray[0])
-                setValues(valuesArray)
-            }
-        }
-        ))
-
-    //Function for sending new CSV data to orderdev database
-    //Take CSV, compile it into an array of data here first. Then POST it to lambda as a nested list
-    /*
-    function callApi() {
-        if (ifFalse === false) {
-            var requestOptions = {
-                method: 'PUT',
-                body: JSON.stringify({
-                    customerName: { valueName },
-                    contactNumber: { valueContactNumber },
-                    dateOrder: { value1 },
-                    dateReceive: { value2 },
-                    deliveryCountry: { valueCountry },
-                    deliveryAddress: { valuePostalCode },
-                    item: { valueItem },
-                    quantity: { valueQuantity }
-                })
-            }
-            fetch(process.env.REACT_APP_API, requestOptions) //API destination
-                .then(data => data.json()) // Parsing the data into a JavaScript object
-                .then(json => alert(JSON.stringify(json))) // Displaying the stringified data in an alert popup
-        }
-    }
-    */
-
+    const [isOpen, setIsOpen] = useState(false);
+    const [content, setContent] = useState(false);
     const togglePopup = (selector) => {
         if (selector === 'startwindow') {
             setContent(<>
@@ -194,6 +146,9 @@ export default function Home() {
         boxShadow: 2
     }
 
+    */
+
+    /* Popup box code if required
     useEffect(() => {
         const initialPopup = () => {
             setContent(<>
@@ -204,39 +159,20 @@ export default function Home() {
             )
         }
         initialPopup();
-    }, []);
+    }, []);*/
 
     // HTML for page layout
     return (
-        < div className="home" >
-            <div className="midWrap">
+        < div className="" >
+            <div className="midWrap">Project info
                 <p>
-                    <var>{useEffect}</var>
-                    <h1><b><span style={{ color: '#AD6ADF' }}>Manufacturing Planning and Control Tool</span></b></h1><br />
-                    The objective of this tool is to allow the user to perform <b>forecasting, master production scheduling,
-                        and material requirement planning</b> for data seamlessly and in an integrated manner.
-                    <br /><br />
-                    The tool is able to develop plans based off different sets of historical customer order data, and also
-                    allows the user to add individual new orders to the existing dataset. <br /><br />
+                    {/*<var>{useEffect}</var> */}
+                    <h1><b>Final Year Project <span style={{ color: '#AD6ADF' }}>C126</span></b></h1><br />
+                    <b>Main Supervisor</b>: Assoc Prof Rajesh Piplani<br /><br />
+                    <b>Title</b>: Development of an application for production scheduling and requirement planning<br /><br />
+                    <b>Objective</b><br /> Develop an computer-based tool that allows <b>forecasting, master production scheduling, and material requirement planning</b> for data seamlessly and in an integrated manner. The tool should be able to develop plans for different set of customer orders/forecast input. <br /><br />
 
-                    <b>Uploading new dataset</b><br />The template form for creating a new dataset of customer orders can be found below.
-                    Please do not tamper with the column names, and ensure that all rows are populated. The uploaded file should
-                    be in <b>CSV</b> format.<br /><br />
-
-
-                    <div className="functions">
-                        <input
-                            type="file"
-                            name="file"
-                            accept='.csv'
-                            onChange={handleFile}>
-                        </input>
-                        <Button sx={buttonStyle} onClick={() => { togglePopup('MPS') }}>
-                            Download dataset template
-                        </Button>
-                    </div><br />
-
-                    <b>App Functions</b><br />
+                    {/*
                     <div className="functions">
                         <Button sx={buttonStyle} onClick={() => { togglePopup('Demand Forecasting') }}>
                             Demand Forecasting
@@ -251,9 +187,10 @@ export default function Home() {
                             content={content}
                             handleClose={togglePopup}
                         />}
-                    </div>
+                        </div><br />*/}
+                    <b>Scope</b><br /> Scope would be limited to planning for a mid-size company, using same data, but allowing data to be ported from one application to another, including any changes to data. Data will be developed based on reference material.<br /><br />
                 </p>
-            </div >
+            </div>
         </div >
     )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import './Topbar.css'
-import HomeIcon from '@mui/icons-material/Home';
-import { Link } from "react-router-dom";
+//import HomeIcon from '@mui/icons-material/Home';
+//import { Link } from "react-router-dom";
 
 export default function Topbar() {
     return (
@@ -12,6 +12,7 @@ export default function Topbar() {
                         FYP<span style={{ color: '#AD6ADF', fontWeight: 'bold' }}> C126</span> Dashboard
                     </div>
                 </div>
+                {/*
                 <div className="topRight">
                     <Link to="/" className="link">
                         <div className="topbarIcons">
@@ -19,6 +20,7 @@ export default function Topbar() {
                         </div>
                     </Link>
                 </div>
+                */}
             </div>
         </div>
     )

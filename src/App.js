@@ -8,12 +8,13 @@ import Masterproductionscheduling from "./pages/masterproductionscheduling/Maste
 import Architecture from "./pages/architecture/Architecture";
 import Ordering from "./pages/ordering/Ordering";
 import Orderinghistory from "./pages/orderinghistory/Orderinghistory";
-import Mrp from "./pages/mrp/mrp"
+import Mrp from "./pages/mrp/mrp";
+import Projectinfo from "./pages/projectinfo/projectinfo";
 import { UserContext } from "./UserContext";
 import { useState, useEffect } from "react";
 import 'trendline';
 
-//Fetching data from DynamoDB through API
+//Fetching data from DynamoDB through API upon app launch
 const useFetch = () => {
   const [dataAPI, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -127,15 +128,16 @@ function App() {
             dataAPI, loading
           }}>
             <Routes>
-              <Route exact path="/" element={<Home />} />
+              <Route exact path="" element={<Home />} />
               <Route exact path="/ordering" element={<Ordering />} />
               <Route exact path="/orderinghistory" element={<Orderinghistory />} />
               <Route exact path="/forecasting" element={<Forecasting />} />
               <Route exact path="/mps" element={<Masterproductionscheduling />} />
               <Route exact path="/mrp" element={<Mrp />} />
               <Route exact path="/architecture" element={<Architecture />} />
+              <Route exact path="/projectinfo" element={<Projectinfo />} />
               <Route exact path='/linkedin' component={() => {
-                window.location.href = 'https://linkedin.com/in/darentwh';
+                window.location.href = 'https://linkedin.com/in/nathan-lim-jia-ler';
                 return null;
               }} />
             </Routes>
