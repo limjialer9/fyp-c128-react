@@ -6,11 +6,11 @@ import Papa from 'papaparse';
 
 export default function Home() {
 
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
     const [content, setContent] = useState(false);
-    const [data, setData] = useState();
-    const [columnArray, setColumn] = useState();
-    const [valuesArray, setValues] = useState();
+    const [newDataset, setNewDataset] = useState(null);
+    const [ifFalse, setIfFalse] = useState(true);
+    var new_dataset = {}
 
     const Popup = props => {
         return (
@@ -28,54 +28,43 @@ export default function Home() {
             header: true,
             skipEmptyLines: true,
             complete: function (result) {
-                const columnArray = [];
-                const valuesArray = [];
-
-                result.data.map((d) => {
-                    columnArray.push(Object.keys(d));
-                    valuesArray.push(Object.values(d))
-                });
-                setData(result.data);
-                setColumn(columnArray[0])
-                setValues(valuesArray)
+                setNewDataset(result.data)
             }
         }
         ))
 
+    useEffect(() => {
+        if (newDataset != null) {
+            setIfFalse(false);
+        }
+        else {
+            setIfFalse(true);
+        }
+
+    }, [newDataset]);
+
+
     //Function for sending new CSV data to orderdev database
     //Take CSV, compile it into an array of data here first. Then POST it to lambda as a nested list
-    /*
+
     function callApi() {
-        if (ifFalse === false) {
-            var requestOptions = {
-                method: 'PUT',
-                body: JSON.stringify({
-                    customerName: { valueName },
-                    contactNumber: { valueContactNumber },
-                    dateOrder: { value1 },
-                    dateReceive: { value2 },
-                    deliveryCountry: { valueCountry },
-                    deliveryAddress: { valuePostalCode },
-                    item: { valueItem },
-                    quantity: { valueQuantity }
-                })
-            }
-            fetch(process.env.REACT_APP_API, requestOptions) //API destination
-                .then(data => data.json()) // Parsing the data into a JavaScript object
-                .then(json => alert(JSON.stringify(json))) // Displaying the stringified data in an alert popup
+        var requestOptions = {
+            method: 'POST',
+            body: JSON.stringify({
+                new_dataset
+            })
         }
+        fetch(process.env.REACT_APP_API, requestOptions) //API destination
+            .then(data => data.json()) // Parsing the data into a JavaScript object
+            .then(json => alert(JSON.stringify(json))) // Displaying the stringified data in an alert popup
     }
-    */
+
+    const handleSubmit = () => {
+        callApi()
+    }
 
     const togglePopup = (selector) => {
-        if (selector === 'startwindow') {
-            setContent(<>
-                <b>Date Tracker</b>
-                <p>The current week is some week which I need to pull later on.
-                </p>
-            </>
-            )
-        } else if (selector === 'MPS') {
+        if (selector === 'MPS') {
             setContent(<>
                 <b>Master Production Scheduling</b>
                 <p>The Master Production Scheduling (MPS) is a developed plan to produce an individual item.
@@ -194,24 +183,12 @@ export default function Home() {
         boxShadow: 2
     }
 
-    useEffect(() => {
-        const initialPopup = () => {
-            setContent(<>
-                <b>Date Tracker</b>
-                <p>The current week is some week which I need to pull later on.
-                </p>
-            </>
-            )
-        }
-        initialPopup();
-    }, []);
 
     // HTML for page layout
     return (
         < div className="home" >
             <div className="midWrap">
                 <p>
-                    <var>{useEffect}</var>
                     <h1><b><span style={{ color: '#AD6ADF' }}>Manufacturing Planning and Control Tool</span></b></h1><br />
                     The objective of this tool is to allow the user to perform <b>forecasting, master production scheduling,
                         and material requirement planning</b> for data seamlessly and in an integrated manner.
@@ -231,6 +208,9 @@ export default function Home() {
                             accept='.csv'
                             onChange={handleFile}>
                         </input>
+                        <Button variant="outlined" disabled={ifFalse} onClick={handleSubmit}>Submit</Button>
+                    </div>
+                    <div className="functions">
                         <Button sx={buttonStyle} onClick={() => { togglePopup('MPS') }}>
                             Download dataset template
                         </Button>
