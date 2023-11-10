@@ -23,6 +23,7 @@ const useFetch = () => {
     async function fetchData() {
       const response = await fetch(url, { method: 'GET', headers: { 'value': 'orderweekly' } });
       const dataAPI = await response.json();
+      console.log('weekly-order data on initialisation:');
       console.log(dataAPI)
 
       //I think when this guy says "data", he means orders-dev and "dataAPI" is weekly-order
@@ -63,8 +64,10 @@ function App() {
       for (let i = 0; i < keys.length; i++) {
         LRdata.push({ y: values[i], x: i + 1 })
       }
+      console.log('weekly-order data compiled for display in graph:')
       console.log(LRdata)
       const trend = createTrend(LRdata, 'x', 'y')
+      console.log('Trendline for linear regression:')
       console.log(trend.calcY(12))
       setOverridevalue1(Math.round(trend.calcY(45)))
       setOverridevalue2(Math.round(trend.calcY(46)))
@@ -83,6 +86,7 @@ function App() {
 
       const result = [];
       const date = new Date(keys[44]);
+      console.log('Historical week values on x-axis of graph')
       console.log(keys)
 
       // Add one day to ensure we start on a Sunday - I dont think this guy did it
@@ -98,6 +102,7 @@ function App() {
         date.setDate(date.getDate() + 7); // Add 7 days to get to next Sunday
       }
 
+      console.log('Forecasted week values on x-axis of graph')
       console.log(result)
       setdateList(result)
     }

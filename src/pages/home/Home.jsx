@@ -10,7 +10,6 @@ export default function Home() {
     const [content, setContent] = useState(false);
     const [newDataset, setNewDataset] = useState(null);
     const [ifFalse, setIfFalse] = useState(true);
-    var new_dataset = {}
 
     const Popup = props => {
         return (
@@ -29,6 +28,8 @@ export default function Home() {
             skipEmptyLines: true,
             complete: function (result) {
                 setNewDataset(result.data)
+                console.log('Parsed data in uploaded CSV file')
+                console.log(result.data)
             }
         }
         ))
@@ -51,12 +52,13 @@ export default function Home() {
         var requestOptions = {
             method: 'POST',
             body: JSON.stringify({
-                new_dataset
+                newDataset
             })
         }
         fetch(process.env.REACT_APP_API, requestOptions) //API destination
             .then(data => data.json()) // Parsing the data into a JavaScript object
             .then(json => alert(JSON.stringify(json))) // Displaying the stringified data in an alert popup
+        console.log('Post call successful')
     }
 
     const handleSubmit = () => {
@@ -169,6 +171,7 @@ export default function Home() {
             </>
             )
         }
+        // Exclamation mark to toggle isOpen - Thanks 2 Vibin
         setIsOpen(!isOpen);
     }
 
@@ -198,7 +201,7 @@ export default function Home() {
 
                     <b>Uploading new dataset</b><br />The template form for creating a new dataset of customer orders can be found below.
                     Please do not tamper with the column names, and ensure that all rows are populated. The uploaded file should
-                    be in <b>CSV</b> format.<br /><br />
+                    be in <b>CSV</b> format. Please <b>reload</b> the page after uploading your new data.<br /><br />
 
 
                     <div className="functions">
@@ -211,9 +214,11 @@ export default function Home() {
                         <Button variant="outlined" disabled={ifFalse} onClick={handleSubmit}>Submit</Button>
                     </div>
                     <div className="functions">
-                        <Button sx={buttonStyle} onClick={() => { togglePopup('MPS') }}>
-                            Download dataset template
-                        </Button>
+                        <a href="https://fypdata-jialer.s3.ap-southeast-1.amazonaws.com/data-template.csv">
+                            <Button sx={buttonStyle}>
+                                Download dataset template
+                            </Button>
+                        </a>
                     </div><br />
 
                     <b>App Functions</b><br />
