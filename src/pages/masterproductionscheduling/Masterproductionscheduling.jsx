@@ -68,6 +68,11 @@ export default function Masterproductionscheduling() {
     setValueSliderLS(value);
     setMyCondition(true)
   };
+  const [valueSliderSS, setValueSliderSS] = useState(100);
+  const changeValueSliderSS = (event, value) => {
+    setValueSliderSS(value);
+    setMyCondition(true)
+  };
   const [myCondition, setMyCondition] = useState(true);
   if (dataAPI !== null) {
     //Retrieving weekly-order database from DynamoDB
@@ -76,13 +81,19 @@ export default function Masterproductionscheduling() {
     var LRVal = [overridevalue1, overridevalue2, overridevalue3, overridevalue4, overridevalue5, overridevalue6, overridevalue7, overridevalue8, overridevalue9, overridevalue10, overridevalue11, overridevalue12, overridevalue13, overridevalue14]
     if (strategyName === 'Chase Strategy') {
       avail_to_promise = []
-      mps_data = [
-        LRVal[0] + valueSlider,
-      ]
-      projected_balance = [valueSlider]
-      for (let i = 1; i < LRVal.length; i++) {
-        mps_data.push(LRVal[i])
-        projected_balance.push(valueSlider)
+      projected_balance = []
+      mps_data = []
+      var balance = valueSlider
+      for (let i = 0; i < 14; i++) {
+        balance = balance - LRVal[i]
+        if (balance < valueSliderSS) {
+          projected_balance.push(valueSliderSS)
+          mps_data.push(valueSliderSS - balance)
+          balance = valueSliderSS
+        } else {
+          projected_balance.push(balance)
+          mps_data.push(0)
+        }
       }
     }
     if (strategyName === 'Level Strategy') {
@@ -92,12 +103,12 @@ export default function Masterproductionscheduling() {
       avail_to_promise = []
       for (let i = 0; i < LRVal.length; i++) {
         total += LRVal[i]
+        total += valueSliderSS
       }
       var avg = Math.round(total / 14)
-      var balance = 0
+      balance = valueSlider
       for (let j = 0; j < LRVal.length; j++) {
         balance = balance + (avg - LRVal[j])
-        //console.log(balance)
         projected_balance.push(balance)
         mps_data.push(avg)
       }
@@ -112,7 +123,7 @@ export default function Masterproductionscheduling() {
       balance = valueSlider
       for (let i = 0; i < 14; i++) {
         balance = balance - LRVal[i]
-        if (balance < 0) {
+        if (balance < valueSliderSS) {
           projected_balance.push(balance + valueSliderLS)
           mps_data.push(valueSliderLS)
           balance = balance + valueSliderLS
@@ -255,13 +266,14 @@ export default function Masterproductionscheduling() {
                             return (
                               <TableCell className={classes.sticky}>
                                 <b>Projected Balance</b>
-                                <i>{valueSlider} Initial on-hand</i>
+                                <i> Initial on-hand: {valueSlider}</i>
                               </TableCell>
                             )
                           } else {
                             return (
                               <TableCell className={classes.sticky}>
                                 <b>Projected Balance</b>
+                                <i> Initial on-hand: {valueSlider}</i>
                               </TableCell>
                             )
                           }
@@ -288,11 +300,7 @@ export default function Masterproductionscheduling() {
                               </TableCell>
                             )
                           } else {
-                            return (
-                              <TableCell className={classes.sticky}>
-                                <b>No ATP?</b>
-                              </TableCell>
-                            )
+                            return (null)
                           }
                         })()}
                         {avail_to_promise.map((item, index) => {
@@ -313,7 +321,7 @@ export default function Masterproductionscheduling() {
                 <div className='featured'>
                   <div className='featuredItemNoShadow'>
                     <div className='featuredTitle'>
-                      Desired On-Hand Balance: <b>{valueSlider}</b>
+                      Initial On-Hand Balance: <b>{valueSlider}</b>
                       <div className='featuredItemNoShadow'>
                         <Slider
                           size="small"
@@ -325,6 +333,67 @@ export default function Masterproductionscheduling() {
                           max={1000}
                           value={valueSlider}
                           onChange={changeValueSlider}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {/*New addition for safety stock*/}
+                  <div className='featuredItemNoShadow'>
+                    <div className='featuredTitle'>
+                      Safety Stock: <b>{valueSliderSS}</b>
+                      <div className='featuredItemNoShadow'>
+                        <Slider
+                          size="small"
+                          defaultValue={500}
+                          step={10}
+                          aria-label="Small"
+                          valueLabelDisplay="auto"
+                          color="secondary"
+                          max={1000}
+                          value={valueSliderSS}
+                          onChange={changeValueSliderSS}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {/*End of new addition for safety stock*/}
+                </div>
+              )
+            } else if (strategyName === 'Level Strategy') {
+              return (
+                <div className='featured'>
+                  <div className='featuredItemNoShadow'>
+                    <div className='featuredTitle'>
+                      Initial On-Hand Balance: <b>{valueSlider}</b>
+                      <div className='featuredItemNoShadow'>
+                        <Slider
+                          size="small"
+                          defaultValue={20}
+                          step={5}
+                          aria-label="Small"
+                          valueLabelDisplay="auto"
+                          color="secondary"
+                          max={1000}
+                          value={valueSlider}
+                          onChange={changeValueSlider}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className='featuredItemNoShadow'>
+                    <div className='featuredTitle'>
+                      Safety Stock: <b>{valueSliderSS}</b>
+                      <div className='featuredItemNoShadow'>
+                        <Slider
+                          size="small"
+                          defaultValue={500}
+                          step={10}
+                          aria-label="Small"
+                          valueLabelDisplay="auto"
+                          color="secondary"
+                          max={1000}
+                          value={valueSliderSS}
+                          onChange={changeValueSliderSS}
                         />
                       </div>
                     </div>
@@ -370,6 +439,26 @@ export default function Masterproductionscheduling() {
                       </div>
                     </div>
                   </div>
+                  {/*New addition for safety stock*/}
+                  <div className='featuredItemNoShadow'>
+                    <div className='featuredTitle'>
+                      Safety Stock: <b>{valueSliderSS}</b>
+                      <div className='featuredItemNoShadow'>
+                        <Slider
+                          size="small"
+                          defaultValue={500}
+                          step={10}
+                          aria-label="Small"
+                          valueLabelDisplay="auto"
+                          color="secondary"
+                          max={1000}
+                          value={valueSliderSS}
+                          onChange={changeValueSliderSS}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {/*End of new addition for safety stock*/}
                 </div>
               )
             }
