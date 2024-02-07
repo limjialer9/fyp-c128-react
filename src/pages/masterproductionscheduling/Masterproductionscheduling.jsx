@@ -53,8 +53,11 @@ export default function Masterproductionscheduling() {
   var { dateList } = useContext(UserContext);
   const { dataAPI, loading } = useContext(UserContext)
   const [strategyName, setStrategyName] = useState('Chase Strategy')
+
   var mps_data = null
   var projected_balance = null
+  var avail_to_promise = null
+
   const [valueSlider, setValueSlider] = useState(0);
   const changeValueSlider = (event, value) => {
     setValueSlider(value);
@@ -71,8 +74,8 @@ export default function Masterproductionscheduling() {
     var keys = Object.keys(dataAPI)
     var values = Object.values(dataAPI)
     var LRVal = [overridevalue1, overridevalue2, overridevalue3, overridevalue4, overridevalue5, overridevalue6, overridevalue7, overridevalue8, overridevalue9, overridevalue10, overridevalue11, overridevalue12, overridevalue13, overridevalue14]
-    console.log(LRVal)
     if (strategyName === 'Chase Strategy') {
+      avail_to_promise = []
       mps_data = [
         LRVal[0] + valueSlider,
       ]
@@ -86,6 +89,7 @@ export default function Masterproductionscheduling() {
       var total = 0
       projected_balance = []
       mps_data = []
+      avail_to_promise = []
       for (let i = 0; i < LRVal.length; i++) {
         total += LRVal[i]
       }
@@ -98,9 +102,13 @@ export default function Masterproductionscheduling() {
         mps_data.push(avg)
       }
     }
+
+    //Calculate projected balance and ATP
     if (strategyName === 'Lot Size Strategy') {
       mps_data = []
       projected_balance = []
+      avail_to_promise = []
+      //Calculate MPS and projected balance data values
       balance = valueSlider
       for (let i = 0; i < 14; i++) {
         balance = balance - LRVal[i]
@@ -113,14 +121,36 @@ export default function Masterproductionscheduling() {
           mps_data.push(0)
         }
       }
+      //Calculate sum of orders until next MPS
+      var mps_tracker = []
+      var ordersum_holding = 0
+      for (let j = 0; j < 14; j++) {
+        ordersum_holding = ordersum_holding + LRVal[j]
+        if (mps_data[j] === 0) {
+          mps_tracker.push(0)
+        }
+        else {
+          mps_tracker.push(ordersum_holding)
+          ordersum_holding = 0
+        }
+      }
+      console.log('Sum of orders until next MPS: ', mps_tracker)
+      //Calculate ATP data values
+      balance = valueSlider
+      for (let k = 0; k < 14; k++) {
+        if (k === 0) {
+          avail_to_promise.push(balance + mps_data[k] - mps_tracker[k])
+          balance = balance + valueSliderLS
+        } else {
+          avail_to_promise.push(avail_to_promise[k - 1] + mps_data[k] - mps_tracker[k])
+          balance = balance + valueSliderLS
+        }
+      }
     }
-    console.log(mps_data)
-    console.log(projected_balance)
   }
   useEffect(() => {
     if (mps_data !== null && myCondition) {
       setMPSdata(mps_data)
-      console.log('MPSData :', MPSdata)
       setMyCondition(false)
     }
   }, [mps_data, setMPSdata, myCondition, dataAPI, MPSdata])
@@ -130,6 +160,7 @@ export default function Masterproductionscheduling() {
 
   // HTML for page layout
   return (
+    //Show 9-month historical data at top of page
     <div className="mps">
       {loading ?
         <Box
@@ -156,7 +187,9 @@ export default function Masterproductionscheduling() {
             <div className='featured'>
               <div className='featuredItem3'>
                 <div className={classes.sticky2}>
-                  <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>9-Month Weekly Historical Data</span>
+                  <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>
+                    9-Month Weekly Historical Data
+                  </span>
                 </div>
                 <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
                   <TableHead>
@@ -199,7 +232,9 @@ export default function Masterproductionscheduling() {
                   <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
                     <TableHead>
                       <TableRow>
-                        <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                        <TableCell className={classes.sticky}>
+                          <b>Date</b>
+                        </TableCell>
                         {removedDateList.map((item, index) => {
                           return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
                         })}
@@ -207,7 +242,9 @@ export default function Masterproductionscheduling() {
                     </TableHead>
                     <TableBody>
                       <TableRow>
-                        <TableCell className={classes.sticky}><b>Forecasted Demand</b></TableCell>
+                        <TableCell className={classes.sticky}>
+                          <b>Forecasted Demand</b>
+                        </TableCell>
                         {LRVal.map((item, index) => {
                           return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
                         })}
@@ -216,11 +253,16 @@ export default function Masterproductionscheduling() {
                         {(() => {
                           if (strategyName === 'Lot Size Strategy') {
                             return (
-                              <TableCell className={classes.sticky}><b>Projected Balance</b> <i>{valueSlider} Initial on-hand</i></TableCell>
+                              <TableCell className={classes.sticky}>
+                                <b>Projected Balance</b>
+                                <i>{valueSlider} Initial on-hand</i>
+                              </TableCell>
                             )
                           } else {
                             return (
-                              <TableCell className={classes.sticky}><b>Projected Balance</b></TableCell>
+                              <TableCell className={classes.sticky}>
+                                <b>Projected Balance</b>
+                              </TableCell>
                             )
                           }
                         })()}
@@ -229,11 +271,35 @@ export default function Masterproductionscheduling() {
                         })}
                       </TableRow>
                       <TableRow>
-                        <TableCell className={classes.sticky}><b>Master Production Schedule</b></TableCell>
+                        <TableCell className={classes.sticky}>
+                          <b>Master Production Schedule</b>
+                        </TableCell>
                         {mps_data.map((item, index) => {
                           return <TableCell className={classes.cellStyles} key={index}><b>{item}</b></TableCell>
                         })}
                       </TableRow>
+                      {/*New addition for ATP*/}
+                      <TableRow>
+                        {(() => {
+                          if (strategyName === 'Lot Size Strategy') {
+                            return (
+                              <TableCell className={classes.sticky}>
+                                <b>Available to Promise</b>
+                              </TableCell>
+                            )
+                          } else {
+                            return (
+                              <TableCell className={classes.sticky}>
+                                <b>No ATP?</b>
+                              </TableCell>
+                            )
+                          }
+                        })()}
+                        {avail_to_promise.map((item, index) => {
+                          return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                        })}
+                      </TableRow>
+                      {/*End of new addition for ATP*/}
                     </TableBody>
                   </Table>
                 </div>
@@ -241,6 +307,7 @@ export default function Masterproductionscheduling() {
             </div>
           </Box>
           {(() => {
+            //Set slider bars at bottom of page
             if (strategyName === 'Chase Strategy') {
               return (
                 <div className='featured'>
