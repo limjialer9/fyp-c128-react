@@ -15,6 +15,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useContext } from 'react';
 import { UserContext } from '../../UserContext';
 
+
 const useStyles = makeStyles({
   sticky: {
     position: "sticky",
@@ -33,7 +34,27 @@ const useStyles = makeStyles({
   }
 });
 
+//For the freeze toggle
+
 export default function Masterproductionscheduling() {
+
+  //Fetching weekly-delivery data from DynamoDB through API upon MPS launch
+  const useFetch2 = () => {
+    const [dataAPI2, setData2] = useState(null);
+    useEffect((url = process.env.REACT_APP_API) => {
+      //Retrieve from order-data by specifying value to be orderhistory
+      async function fetchData2() {
+        const response2 = await fetch(url, { method: 'GET', headers: { 'value': 'deliveryweekly' } });
+        const dataAPI2 = await response2.json();
+
+        setData2(dataAPI2);
+      }
+      fetchData2();
+    }, []);
+    return { dataAPI2 };
+  };
+
+
   const classes = useStyles();
   const { overridevalue1 } = useContext(UserContext);
   const { overridevalue2 } = useContext(UserContext);
@@ -52,9 +73,23 @@ export default function Masterproductionscheduling() {
   const { MPSdata, setMPSdata } = useContext(UserContext);
   var { dateList } = useContext(UserContext);
   const { dataAPI, loading } = useContext(UserContext)
+  const { dataAPI2 } = useFetch2()
+  var dataAPI2_array = []
+  for (var i in dataAPI2)
+    dataAPI2_array.push([i, dataAPI2[i]]);
+  console.log('weekly-deliver data on initialisation:', dataAPI2_array)
+  const removedDateList = dateList.slice(1);
+  console.log('Date list for forecast: ', removedDateList)
+
   const [strategyName, setStrategyName] = useState('Chase Strategy')
+  const [freezeToggle, setFreezeToggle] = useState('Unfrozen')
+  var [mpsOne, setMpsOne] = useState(0)
+  var [mpsTwo, setMpsTwo] = useState(0)
+  var [mpsThree, setMpsThree] = useState(0)
+  var [mpsFour, setMpsFour] = useState(0)
 
   var mps_data = null
+  var delivery_data = []
   var projected_balance = null
   var avail_to_promise = null
 
@@ -79,95 +114,238 @@ export default function Masterproductionscheduling() {
     var keys = Object.keys(dataAPI)
     var values = Object.values(dataAPI)
     var LRVal = [overridevalue1, overridevalue2, overridevalue3, overridevalue4, overridevalue5, overridevalue6, overridevalue7, overridevalue8, overridevalue9, overridevalue10, overridevalue11, overridevalue12, overridevalue13, overridevalue14]
+    var balance = valueSlider
     if (strategyName === 'Chase Strategy') {
-      avail_to_promise = []
-      projected_balance = []
-      mps_data = []
-      var balance = valueSlider
-      for (let i = 0; i < 14; i++) {
-        balance = balance - LRVal[i]
-        if (balance < valueSliderSS) {
-          projected_balance.push(valueSliderSS)
-          mps_data.push(valueSliderSS - balance)
-          balance = valueSliderSS
-        } else {
-          projected_balance.push(balance)
-          mps_data.push(0)
+      if (freezeToggle === 'Unfrozen') {
+        avail_to_promise = []
+        projected_balance = []
+        mps_data = []
+        balance = valueSlider
+        for (let i = 0; i < 14; i++) {
+          balance = balance - LRVal[i]
+          if (balance < valueSliderSS) {
+            projected_balance.push(valueSliderSS)
+            mps_data.push(valueSliderSS - balance)
+            balance = valueSliderSS
+          } else {
+            projected_balance.push(balance)
+            mps_data.push(0)
+          }
         }
+
+      } else {
+        avail_to_promise = []
+        projected_balance = []
+        mps_data = []
+        mps_data.push(mpsOne)
+        mps_data.push(mpsTwo)
+        mps_data.push(mpsThree)
+        mps_data.push(mpsFour)
+        balance = valueSlider
+        for (let i = 0; i < 4; i++) {
+          balance = balance - LRVal[i] + mps_data[i]
+          if (balance < valueSliderSS) {
+            projected_balance.push(valueSliderSS)
+            balance = valueSliderSS
+          } else {
+            projected_balance.push(balance)
+          }
+
+        }
+        for (let i = 4; i < 14; i++) {
+          balance = balance - LRVal[i]
+          if (balance < valueSliderSS) {
+            projected_balance.push(valueSliderSS)
+            mps_data.push(valueSliderSS - balance)
+            balance = valueSliderSS
+          } else {
+            projected_balance.push(balance)
+            mps_data.push(0)
+          }
+        }
+
       }
     }
+
     if (strategyName === 'Level Strategy') {
-      var total = 0
-      projected_balance = []
-      mps_data = []
-      avail_to_promise = []
-      for (let i = 0; i < LRVal.length; i++) {
-        total += LRVal[i]
-        total += valueSliderSS
-      }
-      var avg = Math.round(total / 14)
-      balance = valueSlider
-      for (let j = 0; j < LRVal.length; j++) {
-        balance = balance + (avg - LRVal[j])
-        projected_balance.push(balance)
-        mps_data.push(avg)
+      if (freezeToggle === 'Unfrozen') {
+        var total = 0
+        projected_balance = []
+        mps_data = []
+        avail_to_promise = []
+        for (let i = 0; i < LRVal.length; i++) {
+          total += LRVal[i]
+          total += valueSliderSS
+        }
+        var avg = Math.round(total / 14)
+        balance = valueSlider
+        for (let j = 0; j < LRVal.length; j++) {
+          balance = balance + (avg - LRVal[j])
+          projected_balance.push(balance)
+          mps_data.push(avg)
+        }
+      } else {
+        total = 0
+        projected_balance = []
+        mps_data = []
+        avail_to_promise = []
+        mps_data.push(mpsOne)
+        mps_data.push(mpsTwo)
+        mps_data.push(mpsThree)
+        mps_data.push(mpsFour)
+        for (let i = 0; i < LRVal.length; i++) {
+          total += LRVal[i]
+          total += valueSliderSS
+        }
+        avg = Math.round(total / 14)
+        balance = valueSlider
+        for (let j = 0; j < LRVal.length; j++) {
+          balance = balance + (avg - LRVal[j])
+          projected_balance.push(balance)
+          mps_data.push(avg)
+        }
       }
     }
 
     //Calculate projected balance and ATP
     if (strategyName === 'Lot Size Strategy') {
-      mps_data = []
-      projected_balance = []
-      avail_to_promise = []
-      //Calculate MPS and projected balance data values
-      balance = valueSlider
-      for (let i = 0; i < 14; i++) {
-        balance = balance - LRVal[i]
-        if (balance < valueSliderSS) {
-          projected_balance.push(balance + valueSliderLS)
-          mps_data.push(valueSliderLS)
-          balance = balance + valueSliderLS
-        } else {
+      if (freezeToggle === 'Unfrozen') {
+        mps_data = []
+        delivery_data = []
+        projected_balance = []
+        avail_to_promise = []
+        //Calculate MPS and projected balance data values
+        balance = valueSlider
+        for (let i = 0; i < 14; i++) {
+          balance = balance - LRVal[i]
+          if (balance < valueSliderSS) {
+            projected_balance.push(balance + valueSliderLS)
+            mps_data.push(valueSliderLS)
+            balance = balance + valueSliderLS
+          } else {
+            projected_balance.push(balance)
+            mps_data.push(0)
+          }
+        }
+        //Calculate sum of orders until next MPS
+        var mps_tracker = []
+        var ordersum_holding = 0
+        for (let j = 0; j < 14; j++) {
+          ordersum_holding = ordersum_holding + LRVal[j]
+          if (mps_data[j] === 0) {
+            mps_tracker.push(0)
+          }
+          else {
+            mps_tracker.push(ordersum_holding)
+            ordersum_holding = 0
+          }
+        }
+        console.log('Sum of orders until next MPS: ', mps_tracker)
+
+        //Calculate delivery data
+        var delivery_dates = []
+        var delivery_data_initial = []
+        for (let i = 0; i < removedDateList.length; i++) {
+          for (let j = 0; j < dataAPI2_array.length; j++) {
+            if (dataAPI2_array[j][1] !== 0) {
+              delivery_dates.push(dataAPI2_array[j][0])
+              delivery_data_initial.push(dataAPI2_array[j][1])
+            }
+          }
+        }
+
+        for (let i = 0; i < removedDateList.length; i++) {
+          if (delivery_dates.includes(removedDateList[i])) {
+            delivery_data.push(delivery_data_initial[i])
+          } else {
+            delivery_data.push(0)
+          }
+        }
+
+
+
+        console.log('List of future deliveries: ', delivery_data)
+
+        //Calculate ATP data values
+        balance = valueSlider
+        for (let k = 0; k < 14; k++) {
+          if (k === 0) {
+            avail_to_promise.push(balance + mps_data[k] - mps_tracker[k])
+            balance = balance + valueSliderLS
+          } else {
+            avail_to_promise.push(avail_to_promise[k - 1] + mps_data[k] - mps_tracker[k])
+            balance = balance + valueSliderLS
+          }
+        }
+      } else {
+        mps_data = []
+        projected_balance = []
+        avail_to_promise = []
+        mps_data.push(mpsOne)
+        mps_data.push(mpsTwo)
+        mps_data.push(mpsThree)
+        mps_data.push(mpsFour)
+        //Calculate MPS and projected balance data values
+        balance = valueSlider
+        for (let i = 0; i < 4; i++) {
+          balance = balance - LRVal[i] + mps_data[i]
           projected_balance.push(balance)
-          mps_data.push(0)
         }
-      }
-      //Calculate sum of orders until next MPS
-      var mps_tracker = []
-      var ordersum_holding = 0
-      for (let j = 0; j < 14; j++) {
-        ordersum_holding = ordersum_holding + LRVal[j]
-        if (mps_data[j] === 0) {
-          mps_tracker.push(0)
+        for (let i = 4; i < 14; i++) {
+          balance = balance - LRVal[i]
+          if (balance < valueSliderSS) {
+            projected_balance.push(balance + valueSliderLS)
+            mps_data.push(valueSliderLS)
+            balance = balance + valueSliderLS
+          } else {
+            projected_balance.push(balance)
+            mps_data.push(0)
+          }
         }
-        else {
-          mps_tracker.push(ordersum_holding)
-          ordersum_holding = 0
+        //Calculate sum of orders until next MPS
+        mps_tracker = []
+        ordersum_holding = 0
+        for (let j = 0; j < 14; j++) {
+          ordersum_holding = ordersum_holding + LRVal[j]
+          if (mps_data[j] === 0) {
+            mps_tracker.push(0)
+          }
+          else {
+            mps_tracker.push(ordersum_holding)
+            ordersum_holding = 0
+          }
         }
-      }
-      console.log('Sum of orders until next MPS: ', mps_tracker)
-      //Calculate ATP data values
-      balance = valueSlider
-      for (let k = 0; k < 14; k++) {
-        if (k === 0) {
-          avail_to_promise.push(balance + mps_data[k] - mps_tracker[k])
-          balance = balance + valueSliderLS
-        } else {
-          avail_to_promise.push(avail_to_promise[k - 1] + mps_data[k] - mps_tracker[k])
-          balance = balance + valueSliderLS
+        //Calculate ATP data values
+        balance = valueSlider
+        for (let k = 0; k < 14; k++) {
+          if (k === 0) {
+            avail_to_promise.push(balance + mps_data[k] - mps_tracker[k])
+            balance = balance + valueSliderLS
+          } else {
+            avail_to_promise.push(avail_to_promise[k - 1] + mps_data[k] - mps_tracker[k])
+            balance = balance + valueSliderLS
+          }
         }
       }
     }
   }
+
   useEffect(() => {
     if (mps_data !== null && myCondition) {
       setMPSdata(mps_data)
       setMyCondition(false)
-    }
-  }, [mps_data, setMPSdata, myCondition, dataAPI, MPSdata])
 
-  const removedDateList = dateList.slice(1);
+      setMpsOne(mps_data[0])
+      setMpsTwo(mps_data[1])
+      setMpsThree(mps_data[2])
+      setMpsFour(mps_data[3])
+      console.log(mpsOne, mpsTwo, mpsThree, mpsFour)
+    }
+  }, [mps_data, setMPSdata, myCondition, dataAPI, MPSdata, mpsOne, mpsTwo, mpsThree, mpsFour])
+
+
   const optionsStrat = ['Chase Strategy', 'Level Strategy', 'Lot Size Strategy'];
+  const optionsFreeze = ['Unfrozen', 'Frozen (4 weeks)'];
 
   // HTML for page layout
   return (
@@ -225,6 +403,8 @@ export default function Masterproductionscheduling() {
             <div className='featured'>
               <div className='featuredItem3'>
                 <div className={classes.sticky}>
+
+                  {/*Selecting MPS strategy*/}
                   <Autocomplete
                     value={strategyName}
                     onChange={(event, newValue) => {
@@ -237,6 +417,23 @@ export default function Masterproductionscheduling() {
                     sx={{ width: 250, m: '10px', ml: '20px' }}
                     renderInput={(params) => <TextField {...params} label="MPS Strategy" />}
                   />
+                  {/*End of selecting MPS strategy*/}
+
+                  {/*Toggling MPS freeze*/}
+                  <Autocomplete
+                    value={freezeToggle}
+                    onChange={(event, newValue) => {
+                      setFreezeToggle(newValue);
+                      setMyCondition(true)
+                    }}
+                    id="controllable-states-demo"
+                    options={optionsFreeze}
+                    disableClearable
+                    sx={{ width: 250, m: '10px', ml: '20px' }}
+                    renderInput={(params) => <TextField {...params} label="MPS Freeze" />}
+                  />
+                  {/*End of toggling MPS freeze*/}
+
                   <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>3-Month Weekly Forecast</span>
                 </div>
                 <div>
@@ -257,6 +454,14 @@ export default function Masterproductionscheduling() {
                           <b>Forecasted Demand</b>
                         </TableCell>
                         {LRVal.map((item, index) => {
+                          return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                        })}
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className={classes.sticky}>
+                          <b>Actual Deliveries</b>
+                        </TableCell>
+                        {delivery_data.map((item, index) => {
                           return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
                         })}
                       </TableRow>
@@ -296,7 +501,7 @@ export default function Masterproductionscheduling() {
                           if (strategyName === 'Lot Size Strategy') {
                             return (
                               <TableCell className={classes.sticky}>
-                                <b>Available to Promise</b>
+                                <b>Available to Promise (Cumulative)</b>
                               </TableCell>
                             )
                           } else {
@@ -314,11 +519,14 @@ export default function Masterproductionscheduling() {
               </div>
             </div>
           </Box>
+
+
           {(() => {
             //Set slider bars at bottom of page
             if (strategyName === 'Chase Strategy') {
               return (
                 <div className='featured'>
+
                   <div className='featuredItemNoShadow'>
                     <div className='featuredTitle'>
                       Initial On-Hand Balance: <b>{valueSlider}</b>
@@ -358,6 +566,7 @@ export default function Masterproductionscheduling() {
                   </div>
                   {/*End of new addition for safety stock*/}
                 </div>
+
               )
             } else if (strategyName === 'Level Strategy') {
               return (

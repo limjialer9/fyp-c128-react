@@ -201,7 +201,9 @@ export default function Home() {
 
                     <b>Uploading new dataset</b><br />The template form for creating a new dataset of customer orders can be found below.
                     Please do not tamper with the column names, and ensure that all rows are populated. The uploaded file should
-                    be in <b>CSV</b> format. Please <b>reload</b> the page after uploading your new data.<br /><br />
+                    be in <b>CSV</b> format.
+                    <br />Please <b>wait (up to 20 seconds)</b> for the notification that file has been successfully
+                    uploaded, then <b>reload</b> the page.<br /><br />
 
 
                     <div className="functions">

@@ -14,12 +14,12 @@ import { UserContext } from "./UserContext";
 import { useState, useEffect } from "react";
 import 'trendline';
 
-//Fetching data from DynamoDB through API upon app launch
+//Fetching weekly-order data from DynamoDB through API upon app launch
 const useFetch = () => {
   const [dataAPI, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect((url = process.env.REACT_APP_API) => {
-    //Retrieve from orders-dev by specifying value to be orderhistory
+    //Retrieve from order-data by specifying value to be orderhistory
     async function fetchData() {
       const response = await fetch(url, { method: 'GET', headers: { 'value': 'orderweekly' } });
       const dataAPI = await response.json();
@@ -34,6 +34,8 @@ const useFetch = () => {
   }, []);
   return { dataAPI, loading };
 };
+
+
 
 function App() {
   //Why is useState 400 for all my overridevalues?
@@ -54,7 +56,9 @@ function App() {
   const [overridevalue14, setOverridevalue14] = useState(400);
   const [dateList, setdateList] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [MPSdata, setMPSdata] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-  const { dataAPI, loading } = useFetch()
+  const { dataAPI, loading } = useFetch();
+
+
   useEffect(() => {
     if (dataAPI !== null) {
       var keys = Object.keys(dataAPI)
@@ -107,6 +111,7 @@ function App() {
       setdateList(result)
     }
   }, [dataAPI])
+
   return (
     <Router>
       <Topbar />
