@@ -6,15 +6,14 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Slider from '@mui/material/Slider';
-import 'trendline'
+import 'trendline';
 import { Box } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { makeStyles } from "@material-ui/core/styles";
 import { useContext } from 'react';
 import { UserContext } from '../../UserContext';
-
+import Button from '@mui/material/Button';
 
 const useStyles = makeStyles({
   sticky: {
@@ -54,6 +53,15 @@ export default function Masterproductionscheduling() {
     return { dataAPI2 };
   };
 
+  function testOrderFunc() {
+    if (ifFalse === false) {
+
+    }
+  }
+  //Function for "Test Order" button to work
+  const handleTestOrder = () => {
+    testOrderFunc()
+  }
 
   const classes = useStyles();
   const { overridevalue1 } = useContext(UserContext);
@@ -77,11 +85,10 @@ export default function Masterproductionscheduling() {
   var dataAPI2_array = []
   for (var i in dataAPI2)
     dataAPI2_array.push([i, dataAPI2[i]]);
-  console.log('weekly-deliver data on initialisation:', dataAPI2_array)
   const removedDateList = dateList.slice(1);
   console.log('Date list for forecast: ', removedDateList)
 
-  const [strategyName, setStrategyName] = useState('Chase Strategy')
+  const [strategyName, setStrategyName] = useState('Lot Size Strategy')
   const [freezeToggle, setFreezeToggle] = useState('Unfrozen')
   var [mpsOne, setMpsOne] = useState(0)
   var [mpsTwo, setMpsTwo] = useState(0)
@@ -91,9 +98,19 @@ export default function Masterproductionscheduling() {
   var mps_data = null
   var delivery_data = []
   var projected_balance = null
-  var avail_to_promise = null
+  var atp_cumulative = null
+  var atp_discrete1 = null
+  var atp_discrete2 = null
+  var atp_holding = 0
+  var mps_tracker = []
+  var ordersum_holding = 0
+  var atp_discrete2_holding = 0
+  var atp_discrete_transition = 0
 
-  const [valueSlider, setValueSlider] = useState(0);
+  var delivery_dates_initial = null
+  var delivery_data_initial = null
+
+  const [valueSlider, setValueSlider] = useState(500);
   const changeValueSlider = (event, value) => {
     setValueSlider(value);
     setMyCondition(true);
@@ -108,6 +125,16 @@ export default function Masterproductionscheduling() {
     setValueSliderSS(value);
     setMyCondition(true)
   };
+  const [testOrder, setTestOrder] = useState(0);
+  const changeTestPeriod = (event, value) => {
+    setTestPeriod(value);
+    setMyCondition(true)
+  };
+  const [testPeriod, setTestPeriod] = useState(0);
+  const changeTestOrder = (event, value) => {
+    setTestOrder(value);
+    setMyCondition(true)
+  };
   const [myCondition, setMyCondition] = useState(true);
   if (dataAPI !== null) {
     //Retrieving weekly-order database from DynamoDB
@@ -115,12 +142,33 @@ export default function Masterproductionscheduling() {
     var values = Object.values(dataAPI)
     var LRVal = [overridevalue1, overridevalue2, overridevalue3, overridevalue4, overridevalue5, overridevalue6, overridevalue7, overridevalue8, overridevalue9, overridevalue10, overridevalue11, overridevalue12, overridevalue13, overridevalue14]
     var balance = valueSlider
+    delivery_dates_initial = []
+    delivery_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    delivery_data_initial = []
+
+    for (let i = 0; i < dataAPI2_array.length; i++) {
+      delivery_dates_initial.push(dataAPI2_array[i][0])
+      delivery_data_initial.push(dataAPI2_array[i][1])
+    }
+
+    for (let i = 0; i < removedDateList.length; i++) {
+      for (let j = 0; j < delivery_dates_initial.length; j++) {
+        if (removedDateList[i] === delivery_dates_initial[j]) {
+          delivery_data[i] = delivery_data_initial[j]
+        }
+      }
+    }
+    console.log('delivery_data:', delivery_data)
+
     if (strategyName === 'Chase Strategy') {
       if (freezeToggle === 'Unfrozen') {
-        avail_to_promise = []
+        atp_discrete1 = []
+        atp_discrete2 = []
+        atp_cumulative = []
         projected_balance = []
         mps_data = []
         balance = valueSlider
+
         for (let i = 0; i < 14; i++) {
           balance = balance - LRVal[i]
           if (balance < valueSliderSS) {
@@ -134,7 +182,9 @@ export default function Masterproductionscheduling() {
         }
 
       } else {
-        avail_to_promise = []
+        atp_discrete1 = []
+        atp_discrete2 = []
+        atp_cumulative = []
         projected_balance = []
         mps_data = []
         mps_data.push(mpsOne)
@@ -142,6 +192,7 @@ export default function Masterproductionscheduling() {
         mps_data.push(mpsThree)
         mps_data.push(mpsFour)
         balance = valueSlider
+
         for (let i = 0; i < 4; i++) {
           balance = balance - LRVal[i] + mps_data[i]
           if (balance < valueSliderSS) {
@@ -169,40 +220,45 @@ export default function Masterproductionscheduling() {
 
     if (strategyName === 'Level Strategy') {
       if (freezeToggle === 'Unfrozen') {
-        var total = 0
+        var level_total = 0
         projected_balance = []
         mps_data = []
-        avail_to_promise = []
+        atp_discrete1 = []
+        atp_discrete2 = []
+        atp_cumulative = []
+
         for (let i = 0; i < LRVal.length; i++) {
-          total += LRVal[i]
-          total += valueSliderSS
+          level_total += LRVal[i]
+          level_total += valueSliderSS
         }
-        var avg = Math.round(total / 14)
+        var level_avg = Math.round(level_total / 14)
         balance = valueSlider
         for (let j = 0; j < LRVal.length; j++) {
-          balance = balance + (avg - LRVal[j])
+          balance = balance + (level_avg - LRVal[j])
           projected_balance.push(balance)
-          mps_data.push(avg)
+          mps_data.push(level_avg)
         }
       } else {
-        total = 0
+        level_total = 0
         projected_balance = []
         mps_data = []
-        avail_to_promise = []
+        atp_discrete1 = []
+        atp_discrete2 = []
+        atp_cumulative = []
         mps_data.push(mpsOne)
         mps_data.push(mpsTwo)
         mps_data.push(mpsThree)
         mps_data.push(mpsFour)
         for (let i = 0; i < LRVal.length; i++) {
-          total += LRVal[i]
-          total += valueSliderSS
+          level_total += LRVal[i]
+          level_total += valueSliderSS
         }
-        avg = Math.round(total / 14)
+        level_avg = Math.round(level_total / 14)
         balance = valueSlider
         for (let j = 0; j < LRVal.length; j++) {
-          balance = balance + (avg - LRVal[j])
+          balance = balance + (level_avg - LRVal[j])
           projected_balance.push(balance)
-          mps_data.push(avg)
+          mps_data.push(level_avg)
         }
       }
     }
@@ -211,88 +267,15 @@ export default function Masterproductionscheduling() {
     if (strategyName === 'Lot Size Strategy') {
       if (freezeToggle === 'Unfrozen') {
         mps_data = []
-        delivery_data = []
         projected_balance = []
-        avail_to_promise = []
+        atp_discrete1 = []
+        atp_discrete2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        atp_cumulative = []
+
         //Calculate MPS and projected balance data values
         balance = valueSlider
         for (let i = 0; i < 14; i++) {
-          balance = balance - LRVal[i]
-          if (balance < valueSliderSS) {
-            projected_balance.push(balance + valueSliderLS)
-            mps_data.push(valueSliderLS)
-            balance = balance + valueSliderLS
-          } else {
-            projected_balance.push(balance)
-            mps_data.push(0)
-          }
-        }
-        //Calculate sum of orders until next MPS
-        var mps_tracker = []
-        var ordersum_holding = 0
-        for (let j = 0; j < 14; j++) {
-          ordersum_holding = ordersum_holding + LRVal[j]
-          if (mps_data[j] === 0) {
-            mps_tracker.push(0)
-          }
-          else {
-            mps_tracker.push(ordersum_holding)
-            ordersum_holding = 0
-          }
-        }
-        console.log('Sum of orders until next MPS: ', mps_tracker)
-
-        //Calculate delivery data
-        var delivery_dates = []
-        var delivery_data_initial = []
-        for (let i = 0; i < removedDateList.length; i++) {
-          for (let j = 0; j < dataAPI2_array.length; j++) {
-            if (dataAPI2_array[j][1] !== 0) {
-              delivery_dates.push(dataAPI2_array[j][0])
-              delivery_data_initial.push(dataAPI2_array[j][1])
-            }
-          }
-        }
-
-        for (let i = 0; i < removedDateList.length; i++) {
-          if (delivery_dates.includes(removedDateList[i])) {
-            delivery_data.push(delivery_data_initial[i])
-          } else {
-            delivery_data.push(0)
-          }
-        }
-
-
-
-        console.log('List of future deliveries: ', delivery_data)
-
-        //Calculate ATP data values
-        balance = valueSlider
-        for (let k = 0; k < 14; k++) {
-          if (k === 0) {
-            avail_to_promise.push(balance + mps_data[k] - mps_tracker[k])
-            balance = balance + valueSliderLS
-          } else {
-            avail_to_promise.push(avail_to_promise[k - 1] + mps_data[k] - mps_tracker[k])
-            balance = balance + valueSliderLS
-          }
-        }
-      } else {
-        mps_data = []
-        projected_balance = []
-        avail_to_promise = []
-        mps_data.push(mpsOne)
-        mps_data.push(mpsTwo)
-        mps_data.push(mpsThree)
-        mps_data.push(mpsFour)
-        //Calculate MPS and projected balance data values
-        balance = valueSlider
-        for (let i = 0; i < 4; i++) {
-          balance = balance - LRVal[i] + mps_data[i]
-          projected_balance.push(balance)
-        }
-        for (let i = 4; i < 14; i++) {
-          balance = balance - LRVal[i]
+          balance = balance - Math.max(LRVal[i], delivery_data[i])
           if (balance < valueSliderSS) {
             projected_balance.push(balance + valueSliderLS)
             mps_data.push(valueSliderLS)
@@ -305,25 +288,154 @@ export default function Masterproductionscheduling() {
         //Calculate sum of orders until next MPS
         mps_tracker = []
         ordersum_holding = 0
-        for (let j = 0; j < 14; j++) {
-          ordersum_holding = ordersum_holding + LRVal[j]
-          if (mps_data[j] === 0) {
-            mps_tracker.push(0)
+        for (let i = 0; i < 14; i++) {
+          ordersum_holding = delivery_data[i]
+          for (let j = (i + 1); j < 14; j++) {
+            //If there is an MPS in period j, break for loop
+            if (mps_data[j] !== 0) {
+              break;
+              //Otherwise, add period j's actual orders to the holding var
+            } else {
+              ordersum_holding += delivery_data[j]
+            }
           }
-          else {
-            mps_tracker.push(ordersum_holding)
-            ordersum_holding = 0
+          mps_tracker.push(ordersum_holding)
+          ordersum_holding = 0
+        }
+        console.log('mps_tracker:', mps_tracker)
+
+        //Calculate ATP (discrete) data values
+        balance = valueSlider
+        for (let i = 0; i < 14; i++) {
+          if (i === 0) {
+            atp_discrete1.push(balance + mps_data[i] - mps_tracker[i])
+          } else {
+            if (mps_data[i] === 0) {
+              atp_discrete1.push(0)
+            } else {
+              atp_discrete1.push(mps_data[i] - mps_tracker[i])
+            }
           }
         }
-        //Calculate ATP data values
+        console.log('atp_discrete1', atp_discrete1)
+
+        //Calculate new ATP (discrete) values to ensure overflow to earlier periods works properly
+        atp_discrete2_holding = 0
+        atp_discrete_transition = 0
+        for (let i = 13; i >= 0; i--) {
+          atp_discrete_transition = atp_discrete1[i] + atp_discrete2_holding
+          //First check: Does ATP change in this period?
+          if (atp_discrete1[i] === 0) {
+            atp_discrete2[i] = 0
+          } else {
+            //Second check: Is ATP negative in this period?
+            if (atp_discrete_transition < 0) {
+              atp_discrete2_holding += atp_discrete1[i]
+              atp_discrete2[i] = 0
+              //If not, do nothing
+            } else {
+              atp_discrete2[i] = atp_discrete_transition
+              atp_discrete2_holding = 0
+            }
+          }
+          console.log(atp_discrete2_holding)
+        }
+        console.log('atp_discrete2', atp_discrete2)
+        //Calculate ATP (cumulative) data values
+        balance = valueSlider
+        atp_holding = 0
+        for (let i = 0; i < 14; i++) {
+          if (i === 0) {
+            atp_holding = atp_discrete2[i]
+            atp_cumulative.push(atp_discrete2[i])
+          } else {
+            if (mps_data[i] === 0) {
+              atp_cumulative.push(0)
+            } else {
+              atp_cumulative.push(atp_holding + atp_discrete2[i])
+              atp_holding += atp_discrete2[i]
+            }
+          }
+        }
+
+      } else {
+        mps_data = []
+        projected_balance = []
+        atp_discrete1 = []
+        atp_discrete2 = []
+        atp_cumulative = []
+        mps_data.push(mpsOne)
+        mps_data.push(mpsTwo)
+        mps_data.push(mpsThree)
+        mps_data.push(mpsFour)
+
+        //Calculate MPS and projected balance data values
+        balance = valueSlider
+        for (let i = 0; i < 4; i++) {
+          balance = balance - Math.max(LRVal[i], delivery_data[i]) + mps_data[i]
+          projected_balance.push(balance)
+        }
+        for (let i = 4; i < 14; i++) {
+          balance = balance - Math.max(LRVal[i], delivery_data[i])
+          if (balance < valueSliderSS) {
+            projected_balance.push(balance + valueSliderLS)
+            mps_data.push(valueSliderLS)
+            balance = balance + valueSliderLS
+          } else {
+            projected_balance.push(balance)
+            mps_data.push(0)
+          }
+        }
+
+        //Calculate sum of orders until next MPS
+        mps_tracker = []
+        ordersum_holding = 0
+        for (let i = 0; i < 14; i++) {
+          ordersum_holding = delivery_data[i]
+          for (let j = (i + 1); j < 14; j++) {
+            //If there is an MPS in period j, break for loop
+            if (mps_data[j] !== 0) {
+              break;
+              //Otherwise, add period j's actual orders to the holding var
+            } else {
+              ordersum_holding += delivery_data[j]
+            }
+          }
+          mps_tracker.push(ordersum_holding)
+          ordersum_holding = 0
+        }
+        console.log('mps_tracker:', mps_tracker)
+
+        //Calculate ATP(cumulative) data values
+        balance = valueSlider
+        atp_holding = 0
+        for (let k = 0; k < 14; k++) {
+          if (k === 0) {
+            atp_holding = balance + mps_data[k] - mps_tracker[k]
+            atp_cumulative.push(balance + mps_data[k] - mps_tracker[k])
+            balance = balance + valueSliderLS
+          } else {
+            if (mps_data[k] === 0) {
+              atp_cumulative.push(0)
+            } else {
+              atp_cumulative.push(atp_holding + mps_data[k] - mps_tracker[k])
+              atp_holding = atp_holding + mps_data[k] - mps_tracker[k]
+              balance = balance + valueSliderLS
+            }
+          }
+        }
+        //Calculate ATP (discrete) data values
         balance = valueSlider
         for (let k = 0; k < 14; k++) {
           if (k === 0) {
-            avail_to_promise.push(balance + mps_data[k] - mps_tracker[k])
+            atp_discrete1.push(balance + mps_data[k] - mps_tracker[k])
             balance = balance + valueSliderLS
           } else {
-            avail_to_promise.push(avail_to_promise[k - 1] + mps_data[k] - mps_tracker[k])
-            balance = balance + valueSliderLS
+            if (mps_data[k] === 0) {
+              atp_discrete1.push(0)
+            } else {
+              atp_discrete1.push(mps_data[k] - mps_tracker[k])
+            }
           }
         }
       }
@@ -339,12 +451,22 @@ export default function Masterproductionscheduling() {
       setMpsTwo(mps_data[1])
       setMpsThree(mps_data[2])
       setMpsFour(mps_data[3])
-      console.log(mpsOne, mpsTwo, mpsThree, mpsFour)
     }
   }, [mps_data, setMPSdata, myCondition, dataAPI, MPSdata, mpsOne, mpsTwo, mpsThree, mpsFour])
 
+  //Logic for testing orders
+  const [ifFalse, setIfFalse] = React.useState(true)
+  useEffect(() => {
+    if (testOrder !== 0) {
+      setIfFalse(false);
+    }
+    else {
+      setIfFalse(true);
+    }
+  }, [testOrder])
 
-  const optionsStrat = ['Chase Strategy', 'Level Strategy', 'Lot Size Strategy'];
+
+  const optionsStrat = ['Lot Size Strategy', 'Chase Strategy', 'Level Strategy'];
   const optionsFreeze = ['Unfrozen', 'Frozen (4 weeks)'];
 
   // HTML for page layout
@@ -400,10 +522,11 @@ export default function Masterproductionscheduling() {
                 </Table>
               </div>
             </div>
+
+
             <div className='featured'>
               <div className='featuredItem3'>
                 <div className={classes.sticky}>
-
                   {/*Selecting MPS strategy*/}
                   <Autocomplete
                     value={strategyName}
@@ -433,9 +556,10 @@ export default function Masterproductionscheduling() {
                     renderInput={(params) => <TextField {...params} label="MPS Freeze" />}
                   />
                   {/*End of toggling MPS freeze*/}
-
                   <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>3-Month Weekly Forecast</span>
                 </div>
+
+
                 <div>
                   <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
                     <TableHead>
@@ -459,7 +583,7 @@ export default function Masterproductionscheduling() {
                       </TableRow>
                       <TableRow>
                         <TableCell className={classes.sticky}>
-                          <b>Actual Deliveries</b>
+                          <b>Actual Orders</b>
                         </TableCell>
                         {delivery_data.map((item, index) => {
                           return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
@@ -488,15 +612,6 @@ export default function Masterproductionscheduling() {
                         })}
                       </TableRow>
                       <TableRow>
-                        <TableCell className={classes.sticky}>
-                          <b>Master Production Schedule</b>
-                        </TableCell>
-                        {mps_data.map((item, index) => {
-                          return <TableCell className={classes.cellStyles} key={index}><b>{item}</b></TableCell>
-                        })}
-                      </TableRow>
-                      {/*New addition for ATP*/}
-                      <TableRow>
                         {(() => {
                           if (strategyName === 'Lot Size Strategy') {
                             return (
@@ -508,11 +623,34 @@ export default function Masterproductionscheduling() {
                             return (null)
                           }
                         })()}
-                        {avail_to_promise.map((item, index) => {
+                        {atp_cumulative.map((item, index) => {
                           return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
                         })}
                       </TableRow>
-                      {/*End of new addition for ATP*/}
+                      <TableRow>
+                        {(() => {
+                          if (strategyName === 'Lot Size Strategy') {
+                            return (
+                              <TableCell className={classes.sticky}>
+                                <b>Available to Promise (Discrete)</b>
+                              </TableCell>
+                            )
+                          } else {
+                            return (null)
+                          }
+                        })()}
+                        {atp_discrete2.map((item, index) => {
+                          return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                        })}
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className={classes.sticky}>
+                          <b>Master Production Schedule</b>
+                        </TableCell>
+                        {mps_data.map((item, index) => {
+                          return <TableCell className={classes.cellStyles} key={index}><b>{item}</b></TableCell>
+                        })}
+                      </TableRow>
                     </TableBody>
                   </Table>
                 </div>
@@ -522,25 +660,20 @@ export default function Masterproductionscheduling() {
 
 
           {(() => {
+
             //Set slider bars at bottom of page
             if (strategyName === 'Chase Strategy') {
               return (
                 <div className='featured'>
-
                   <div className='featuredItemNoShadow'>
                     <div className='featuredTitle'>
-                      Initial On-Hand Balance: <b>{valueSlider}</b>
+                      Initial On-Hand Balance:
                       <div className='featuredItemNoShadow'>
-                        <Slider
-                          size="small"
-                          defaultValue={20}
-                          step={5}
-                          aria-label="Small"
-                          valueLabelDisplay="auto"
-                          color="secondary"
-                          max={1000}
+                        <TextField
+                          required
+                          id="outlined-required"
                           value={valueSlider}
-                          onChange={changeValueSlider}
+                          onChange={(event) => { changeValueSlider(event.target.value) }}
                         />
                       </div>
                     </div>
@@ -550,16 +683,11 @@ export default function Masterproductionscheduling() {
                     <div className='featuredTitle'>
                       Safety Stock: <b>{valueSliderSS}</b>
                       <div className='featuredItemNoShadow'>
-                        <Slider
-                          size="small"
-                          defaultValue={500}
-                          step={10}
-                          aria-label="Small"
-                          valueLabelDisplay="auto"
-                          color="secondary"
-                          max={1000}
+                        <TextField
+                          required
+                          id="outlined-required"
                           value={valueSliderSS}
-                          onChange={changeValueSliderSS}
+                          onChange={(event) => { changeValueSliderSS(event.target.value) }}
                         />
                       </div>
                     </div>
@@ -575,16 +703,11 @@ export default function Masterproductionscheduling() {
                     <div className='featuredTitle'>
                       Initial On-Hand Balance: <b>{valueSlider}</b>
                       <div className='featuredItemNoShadow'>
-                        <Slider
-                          size="small"
-                          defaultValue={20}
-                          step={5}
-                          aria-label="Small"
-                          valueLabelDisplay="auto"
-                          color="secondary"
-                          max={1000}
+                        <TextField
+                          required
+                          id="outlined-required"
                           value={valueSlider}
-                          onChange={changeValueSlider}
+                          onChange={(event) => { changeValueSlider(event.target.value) }}
                         />
                       </div>
                     </div>
@@ -593,16 +716,11 @@ export default function Masterproductionscheduling() {
                     <div className='featuredTitle'>
                       Safety Stock: <b>{valueSliderSS}</b>
                       <div className='featuredItemNoShadow'>
-                        <Slider
-                          size="small"
-                          defaultValue={500}
-                          step={10}
-                          aria-label="Small"
-                          valueLabelDisplay="auto"
-                          color="secondary"
-                          max={1000}
+                        <TextField
+                          required
+                          id="outlined-required"
                           value={valueSliderSS}
-                          onChange={changeValueSliderSS}
+                          onChange={(event) => { changeValueSliderSS(event.target.value) }}
                         />
                       </div>
                     </div>
@@ -614,36 +732,26 @@ export default function Masterproductionscheduling() {
                 <div className='featured'>
                   <div className='featuredItemNoShadow'>
                     <div className='featuredTitle'>
-                      Initial On-Hand Balance: <b>{valueSlider}</b>
+                      Initial On-hand Balance:
                       <div className='featuredItemNoShadow'>
-                        <Slider
-                          size="small"
-                          defaultValue={20}
-                          step={5}
-                          aria-label="Small"
-                          valueLabelDisplay="auto"
-                          color="secondary"
-                          max={1000}
+                        <TextField
+                          required
+                          id="outlined-required"
                           value={valueSlider}
-                          onChange={changeValueSlider}
+                          onChange={(event) => { changeValueSlider(event.target.value) }}
                         />
                       </div>
                     </div>
                   </div>
                   <div className='featuredItemNoShadow'>
                     <div className='featuredTitle'>
-                      Desired Lot Size: <b>{valueSliderLS}</b>
+                      Desired Lot Size:
                       <div className='featuredItemNoShadow'>
-                        <Slider
-                          size="small"
-                          defaultValue={500}
-                          step={10}
-                          aria-label="Small"
-                          valueLabelDisplay="auto"
-                          color="secondary"
-                          max={1000}
+                        <TextField
+                          required
+                          id="outlined-required"
                           value={valueSliderLS}
-                          onChange={changeValueSliderLS}
+                          onChange={(event) => { changeValueSliderLS(event.target.value) }}
                         />
                       </div>
                     </div>
@@ -651,18 +759,13 @@ export default function Masterproductionscheduling() {
                   {/*New addition for safety stock*/}
                   <div className='featuredItemNoShadow'>
                     <div className='featuredTitle'>
-                      Safety Stock: <b>{valueSliderSS}</b>
+                      Safety Stock:
                       <div className='featuredItemNoShadow'>
-                        <Slider
-                          size="small"
-                          defaultValue={500}
-                          step={10}
-                          aria-label="Small"
-                          valueLabelDisplay="auto"
-                          color="secondary"
-                          max={1000}
+                        <TextField
+                          required
+                          id="outlined-required"
                           value={valueSliderSS}
-                          onChange={changeValueSliderSS}
+                          onChange={(event) => { changeValueSliderSS(event.target.value) }}
                         />
                       </div>
                     </div>
@@ -673,6 +776,41 @@ export default function Masterproductionscheduling() {
             }
           })()}
         </div>}
+
+      <div className='featured'>
+        <div className='featuredItemNoShadow'>
+          <div className='featuredTitle'>
+            Test Order:
+            <div className='featuredItemNoShadow'>
+              <TextField
+                required
+                id="outlined-required"
+                value={testOrder}
+                onChange={(event) => { changeTestOrder(event.target.value) }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className='featuredItemNoShadow'>
+          <div className='featuredTitle'>
+            Test Period:
+            <div className='featuredItemNoShadow'>
+              <TextField
+                required
+                id="outlined-required"
+                value={testPeriod}
+                onChange={(event) => { changeTestPeriod(event.target.value) }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className='featuredItemNoShadow'>
+          <div className='featuredItemNoShadow'>
+            <Button variant="outlined" disabled={ifFalse} onClick={handleTestOrder}>Submit</Button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

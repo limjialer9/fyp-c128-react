@@ -9,7 +9,7 @@ export default function Topbar() {
             <div className="topbarWrapper">
                 <div className="topLeft">
                     <div className='logo'>
-                        FYP<span style={{ color: '#AD6ADF', fontWeight: 'bold' }}> C126</span> Dashboard
+                        FYP<span style={{ color: '#AD6ADF', fontWeight: 'bold' }}> C128</span> Dashboard
                     </div>
                 </div>
                 {/*

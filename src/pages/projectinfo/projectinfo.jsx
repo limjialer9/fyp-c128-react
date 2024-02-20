@@ -167,8 +167,9 @@ export default function Projectinfo() {
             <div className="midWrap">Project info
                 <p>
                     {/*<var>{useEffect}</var> */}
-                    <h1><b>Final Year Project <span style={{ color: '#AD6ADF' }}>C126</span></b></h1><br />
+                    <h1><b>Final Year Project <span style={{ color: '#AD6ADF' }}>C128</span></b></h1><br />
                     <b>Main Supervisor</b>: Assoc Prof Rajesh Piplani<br /><br />
+                    <b>Student</b>: Lim Jia Ler (U2020547E)<br /><br />
                     <b>Title</b>: Development of an application for production scheduling and requirement planning<br /><br />
                     <b>Objective</b><br /> Develop an computer-based tool that allows <b>forecasting, master production scheduling, and material requirement planning</b> for data seamlessly and in an integrated manner. The tool should be able to develop plans for different set of customer orders/forecast input. <br /><br />
 
