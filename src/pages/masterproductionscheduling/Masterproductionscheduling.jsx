@@ -69,7 +69,6 @@ export default function Masterproductionscheduling() {
   const { overridevalue12 } = useContext(UserContext);
   const { overridevalue13 } = useContext(UserContext);
   const { overridevalue14 } = useContext(UserContext);
-  const { MPSdata, setMPSdata } = useContext(UserContext);
   var { dateList } = useContext(UserContext);
   const { dataAPI, loading } = useContext(UserContext)
   const { dataAPI2 } = useFetch2()
@@ -226,8 +225,8 @@ export default function Masterproductionscheduling() {
         atp_discrete2_holding = 0
       }
     }
-
     console.log('atp_discrete2_test', atp_discrete2_test)
+
     //Calculate ATP (cumulative) data values
     balance = valueSlider
     atp_holding = 0
@@ -244,36 +243,43 @@ export default function Masterproductionscheduling() {
         }
       }
     }
+
+    //Decide what to return
     if ((mps_data_test[0] !== mpsOne) ||
       (mps_data_test[1] !== mpsTwo) ||
       (mps_data_test[2] !== mpsThree) ||
-      (mps_data_test[3] !== mpsFour) ||
-      (atp_cumulative_test[0] < 0)) {
-      console.log('test failed')
+      (mps_data_test[3] !== mpsFour)) {
+      console.log('Test order failed. MPS insufficient')
       return (0)
-
-    } else {
-      console.log('test passed')
+    } else if (atp_cumulative_test[0] < 0) {
+      console.log('Test order failed. ATP insufficient')
       return (1)
+    } else {
+      console.log('Test order passed')
+      return (2)
     }
   }
+
   //Control the pop-up text when button pressed according to testOrderFunc result
   const togglePopup = (selector) => {
     if (strategyName !== 'Lot Size Strategy') {
       setContent(<>
-        Order testing is only available for Lot Size Strategy
-      </>
-      )
+        Order testing is only available for Lot Size Strategy</>)
+    } else if (testOrder <= 0) {
+      setContent(<>
+        Please enter a valid quantity for the test order.</>)
+    } else if ((testPeriod < 1) || (testPeriod > 14)) {
+      setContent(<>
+        Please enter a valid time period for the test order.</>)
     } else if (selector === 0) {
       setContent(<>
-        denied
-      </>
-      )
+        Test order is invalid. Requires additional MPS in frozen period.</>)
     } else if (selector === 1) {
       setContent(<>
-        approved
-      </>
-      )
+        Test order is invalid. Available ATP will be exceeded.</>)
+    } else if (selector === 2) {
+      setContent(<>
+        Test order successful!</>)
     }
     setIsOpen(!isOpen);
   }
@@ -322,14 +328,14 @@ export default function Masterproductionscheduling() {
         atp_cumulative = []
         projected_balance = []
         mps_data = []
-        balance = valueSlider
+        balance = Number(valueSlider)
 
         for (let i = 0; i < 14; i++) {
           balance = balance - LRVal[i]
-          if (balance < valueSliderSS) {
-            projected_balance.push(valueSliderSS)
-            mps_data.push(valueSliderSS - balance)
-            balance = valueSliderSS
+          if (balance < Number(valueSliderSS)) {
+            projected_balance.push(Number(valueSliderSS))
+            mps_data.push(Number(valueSliderSS) - balance)
+            balance = Number(valueSliderSS)
           } else {
             projected_balance.push(balance)
             mps_data.push(0)
@@ -350,9 +356,9 @@ export default function Masterproductionscheduling() {
 
         for (let i = 0; i < 4; i++) {
           balance = balance - LRVal[i] + mps_data[i]
-          if (balance < valueSliderSS) {
-            projected_balance.push(valueSliderSS)
-            balance = valueSliderSS
+          if (balance < Number(valueSliderSS)) {
+            projected_balance.push(Number(valueSliderSS))
+            balance = Number(valueSliderSS)
           } else {
             projected_balance.push(balance)
           }
@@ -360,10 +366,10 @@ export default function Masterproductionscheduling() {
         }
         for (let i = 4; i < 14; i++) {
           balance = balance - LRVal[i]
-          if (balance < valueSliderSS) {
-            projected_balance.push(valueSliderSS)
-            mps_data.push(valueSliderSS - balance)
-            balance = valueSliderSS
+          if (balance < Number(valueSliderSS)) {
+            projected_balance.push(Number(valueSliderSS))
+            mps_data.push(Number(valueSliderSS) - balance)
+            balance = Number(valueSliderSS)
           } else {
             projected_balance.push(balance)
             mps_data.push(0)
@@ -428,8 +434,6 @@ export default function Masterproductionscheduling() {
         atp_discrete2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         atp_cumulative = []
 
-        //Fixing shit
-
         //Calculate MPS and projected balance data values
         balance = Number(valueSlider)
         for (let i = 0; i < 14; i++) {
@@ -443,6 +447,7 @@ export default function Masterproductionscheduling() {
             mps_data.push(0)
           }
         }
+        console.log('MPS data', mps_data)
         //Calculate sum of orders until next MPS
         mps_tracker = []
         ordersum_holding = 0
@@ -518,17 +523,19 @@ export default function Masterproductionscheduling() {
           }
         }
 
+
+        //When frozen
       } else {
         mps_data = []
         projected_balance = []
         atp_discrete1 = []
-        atp_discrete2 = []
+        atp_discrete2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         atp_cumulative = []
         mps_data.push(mpsOne)
         mps_data.push(mpsTwo)
         mps_data.push(mpsThree)
         mps_data.push(mpsFour)
-
+        console.log('MPS data (frozen)', mps_data)
         //Calculate MPS and projected balance data values
         balance = Number(valueSlider)
         for (let i = 0; i < 4; i++) {
@@ -546,7 +553,7 @@ export default function Masterproductionscheduling() {
             mps_data.push(0)
           }
         }
-
+        console.log('MPS data (frozen)', mps_data)
         //Calculate sum of orders until next MPS
         mps_tracker = []
         ordersum_holding = 0
@@ -564,7 +571,7 @@ export default function Masterproductionscheduling() {
           mps_tracker.push(ordersum_holding)
           ordersum_holding = 0
         }
-        console.log('mps_tracker:', mps_tracker)
+        console.log('mps_tracker (frozen):', mps_tracker)
 
         //Calculate ATP (discrete) data values
         balance = Number(valueSlider)
@@ -579,7 +586,7 @@ export default function Masterproductionscheduling() {
             }
           }
         }
-        console.log('atp_discrete1', atp_discrete1)
+        console.log('atp_discrete1 (frozen)', atp_discrete1)
 
         //Calculate new ATP (discrete) values to ensure overflow to earlier periods works properly
         atp_discrete2_holding = 0
@@ -603,7 +610,7 @@ export default function Masterproductionscheduling() {
             atp_discrete2_holding = 0
           }
         }
-        console.log('atp_discrete2', atp_discrete2)
+        console.log('atp_discrete2 (frozen)', atp_discrete2)
         //Calculate ATP (cumulative) data values
         balance = Number(valueSlider)
         atp_holding = 0
@@ -626,7 +633,6 @@ export default function Masterproductionscheduling() {
 
   useEffect(() => {
     if (mps_data !== null && myCondition) {
-      setMPSdata(mps_data)
       setMyCondition(false)
 
       setMpsOne(mps_data[0])
@@ -634,7 +640,7 @@ export default function Masterproductionscheduling() {
       setMpsThree(mps_data[2])
       setMpsFour(mps_data[3])
     }
-  }, [mps_data, setMPSdata, myCondition, dataAPI, MPSdata, mpsOne, mpsTwo, mpsThree, mpsFour])
+  }, [mps_data, myCondition, dataAPI, mpsOne, mpsTwo, mpsThree, mpsFour])
 
 
 
