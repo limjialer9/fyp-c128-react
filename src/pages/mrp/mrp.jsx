@@ -73,6 +73,7 @@ export default function Mrp() {
     const [PvbSS, setPvbSS] = useState(1000)
     const [PvbOnHand, setPvbOnHand] = useState(1000)
 
+    //Poppet Assembly
     const [PoppetLot, setPoppetLot] = useState(1500)
     const [PoppetSS, setPoppetSS] = useState(1000)
     const [PoppetOnHand, setPoppetOnHand] = useState(3000)
@@ -93,18 +94,62 @@ export default function Mrp() {
     const [PoppetPartLot, setPoppetPartLot] = useState(4500)
     const [PoppetPartSS, setPoppetPartSS] = useState(2000)
     const [PoppetPartOnHand, setPoppetPartOnHand] = useState(1500)
+    //End Poppet Assembly
+
+    //Spider Assembly
+    const [SpiderLot, setSpiderLot] = useState(1500)
+    const [SpiderSS, setSpiderSS] = useState(1000)
+    const [SpiderOnHand, setSpiderOnHand] = useState(3000)
+    const [SpiderState, setSpiderState] = useState(false);
+
+    const [SpiderBoltLot, setSpiderBoltLot] = useState(3000)
+    const [SpiderBoltSS, setSpiderBoltSS] = useState(900)
+    const [SpiderBoltOnHand, setSpiderBoltOnHand] = useState(5000)
+
+    const [SpiderDiscLot, setSpiderDiscLot] = useState(5000)
+    const [SpiderDiscSS, setSpiderDiscSS] = useState(1500)
+    const [SpiderDiscOnHand, setSpiderDiscOnHand] = useState(2500)
+
+    const [SpiderPartLot, setSpiderPartLot] = useState(2000)
+    const [SpiderPartSS, setSpiderPartSS] = useState(1200)
+    const [SpiderPartOnHand, setSpiderPartOnHand] = useState(2000)
+
+    const [SpiderNutLot, setSpiderNutLot] = useState(4500)
+    const [SpiderNutSS, setSpiderNutSS] = useState(2000)
+    const [SpiderNutOnHand, setSpiderNutOnHand] = useState(1500)
+    //End Spider Assembly
+
+    const [BoltLot, setBoltLot] = useState(4000)
+    const [BoltSS, setBoltSS] = useState(3000)
+    const [BoltOnHand, setBoltOnHand] = useState(10000)
+
+    const [CanopyLot, setCanopyLot] = useState(1200)
+    const [CanopySS, setCanopySS] = useState(1000)
+    const [CanopyOnHand, setCanopyOnHand] = useState(2000)
+
+    const [BonnetLot, setBonnetLot] = useState(1200)
+    const [BonnetSS, setBonnetSS] = useState(1000)
+    const [BonnetOnHand, setBonnetOnHand] = useState(2000)
+
+    const [PlasticWasherLot, setPlasticWasherLot] = useState(1200)
+    const [PlasticWasherSS, setPlasticWasherSS] = useState(1000)
+    const [PlasticWasherOnHand, setPlasticWasherOnHand] = useState(2000)
 
     const [ORingLot, setORingLot] = useState(1200)
     const [ORingSS, setORingSS] = useState(1000)
     const [ORingOnHand, setORingOnHand] = useState(2000)
 
+    const [SpringLot, setSpringLot] = useState(1200)
+    const [SpringSS, setSpringSS] = useState(1000)
+    const [SpringOnHand, setSpringOnHand] = useState(2000)
+
+    const [TestCockLot, setTestCockLot] = useState(1200)
+    const [TestCockSS, setTestCockSS] = useState(1000)
+    const [TestCockOnHand, setTestCockOnHand] = useState(2000)
+
     const [BallValveLot, setBallValveLot] = useState(3000)
     const [BallValveSS, setBallValveSS] = useState(1800)
     const [BallValveOnHand, setBallValveOnHand] = useState(8000)
-
-    const [BoltLot, setBoltLot] = useState(4000)
-    const [BoltSS, setBoltSS] = useState(3000)
-    const [BoltOnHand, setBoltOnHand] = useState(10000)
 
     const { dateList } = useContext(UserContext);
 
@@ -273,7 +318,7 @@ export default function Mrp() {
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                     >
                                                         <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            Plastic Wasber, 721A-12
+                                                            Plastic Washer, 721A-12
                                                         </TableCell>
                                                         <TableCell style={{ width: '50%' }}>
                                                             {noOfParts}
@@ -445,12 +490,84 @@ export default function Mrp() {
                             individualComponentMRP(PoppetDiscOnHand, PoppetScheduledReceipts, PoppetDiscLot, PoppetDiscSS, PoppetDiscScheduledReceipts, PoppetDiscLT, PoppetDiscBalanceList, PoppetDiscMultiplier, PoppetDiscPlannedReceipts)
 
                             //Level 2 (Parent: Poppet Assembly)
-                            const PoppetPartLT = 4
+                            const PoppetPartLT = 8
                             const PoppetPartMultiplier = 1
                             var PoppetPartScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                             var PoppetPartBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                             var PoppetPartPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                             individualComponentMRP(PoppetPartOnHand, PoppetScheduledReceipts, PoppetPartLot, PoppetPartSS, PoppetPartScheduledReceipts, PoppetPartLT, PoppetPartBalanceList, PoppetPartMultiplier, PoppetPartPlannedReceipts)
+
+                            //Level 1
+                            const SpiderLT = 1
+                            const SpiderMultiplier = 1
+                            var SpiderScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpiderBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpiderPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            individualComponentMRP(SpiderOnHand, PvbScheduledReceipts, SpiderLot, SpiderSS, SpiderScheduledReceipts, SpiderLT, SpiderBalanceList, SpiderMultiplier, SpiderPlannedReceipts)
+
+                            //Level 2 (Parent: Spider Assembly)
+                            const SpiderBoltLT = 11
+                            const SpiderBoltMultiplier = 1
+                            var SpiderBoltScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpiderBoltBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpiderBoltPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            individualComponentMRP(SpiderBoltOnHand, SpiderScheduledReceipts, SpiderBoltLot, SpiderBoltSS, SpiderBoltScheduledReceipts, SpiderBoltLT, SpiderBoltBalanceList, SpiderBoltMultiplier, SpiderBoltPlannedReceipts)
+
+                            //Level 2 (Parent: Spider Assembly)
+                            const SpiderDiscLT = 8
+                            const SpiderDiscMultiplier = 1
+                            var SpiderDiscScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpiderDiscBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpiderDiscPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            individualComponentMRP(SpiderDiscOnHand, SpiderScheduledReceipts, SpiderDiscLot, SpiderDiscSS, SpiderDiscScheduledReceipts, SpiderDiscLT, SpiderDiscBalanceList, SpiderDiscMultiplier, SpiderDiscPlannedReceipts)
+
+                            //Level 2 (Parent: Spider Assembly)
+                            const SpiderPartLT = 5
+                            const SpiderPartMultiplier = 1
+                            var SpiderPartScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpiderPartBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpiderPartPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            individualComponentMRP(SpiderPartOnHand, SpiderScheduledReceipts, SpiderPartLot, SpiderPartSS, SpiderPartScheduledReceipts, SpiderPartLT, SpiderPartBalanceList, SpiderPartMultiplier, SpiderPartPlannedReceipts)
+
+                            //Level 2 (Parent: Spider Assembly)
+                            const SpiderNutLT = 1
+                            const SpiderNutMultiplier = 1
+                            var SpiderNutScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpiderNutBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpiderNutPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            individualComponentMRP(SpiderNutOnHand, SpiderScheduledReceipts, SpiderNutLot, SpiderNutSS, SpiderNutScheduledReceipts, SpiderNutLT, SpiderNutBalanceList, SpiderNutMultiplier, SpiderNutPlannedReceipts)
+
+                            //Level 1
+                            const BoltLT = 5
+                            const BoltMultiplier = 3
+                            var BoltScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var BoltBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var BoltPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            individualComponentMRP(BoltOnHand, PvbScheduledReceipts, BoltLot, BoltSS, BoltScheduledReceipts, BoltLT, BoltBalanceList, BoltMultiplier, BoltPlannedReceipts)
+
+                            //Level 1
+                            const CanopyLT = 5
+                            const CanopyMultiplier = 1
+                            var CanopyScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var CanopyBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var CanopyPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            individualComponentMRP(CanopyOnHand, PvbScheduledReceipts, CanopyLot, CanopySS, CanopyScheduledReceipts, CanopyLT, CanopyBalanceList, CanopyMultiplier, CanopyPlannedReceipts)
+
+                            //Level 1
+                            const BonnetLT = 7
+                            const BonnetMultiplier = 1
+                            var BonnetScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var BonnetBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var BonnetPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            individualComponentMRP(BonnetOnHand, PvbScheduledReceipts, BonnetLot, BonnetSS, BonnetScheduledReceipts, BonnetLT, BonnetBalanceList, BonnetMultiplier, BonnetPlannedReceipts)
+
+                            //Level 1
+                            const PlasticWasherLT = 5
+                            const PlasticWasherMultiplier = 1
+                            var PlasticWasherScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var PlasticWasherBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var PlasticWasherPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            individualComponentMRP(PlasticWasherOnHand, PvbScheduledReceipts, PlasticWasherLot, PlasticWasherSS, PlasticWasherScheduledReceipts, PlasticWasherLT, PlasticWasherBalanceList, PlasticWasherMultiplier, PlasticWasherPlannedReceipts)
 
                             //Level 1
                             const ORingLT = 1
@@ -463,6 +580,22 @@ export default function Mrp() {
                             console.log(ORingScheduledReceipts)
 
                             //Level 1
+                            const SpringLT = 6
+                            const SpringMultiplier = 1
+                            var SpringScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpringBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var SpringPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            individualComponentMRP(SpringOnHand, PvbScheduledReceipts, SpringLot, SpringSS, SpringScheduledReceipts, SpringLT, SpringBalanceList, SpringMultiplier, SpringPlannedReceipts)
+
+                            //Level 1
+                            const TestCockLT = 9
+                            const TestCockMultiplier = 2
+                            var TestCockScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var TestCockBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            var TestCockPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            individualComponentMRP(TestCockOnHand, PvbScheduledReceipts, TestCockLot, TestCockSS, TestCockScheduledReceipts, TestCockLT, TestCockBalanceList, TestCockMultiplier, TestCockPlannedReceipts)
+
+                            //Level 1
                             const BallValveLT = 8
                             const BallValveMultiplier = 2
                             var BallValveScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -470,13 +603,6 @@ export default function Mrp() {
                             var BallValvePlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                             individualComponentMRP(BallValveOnHand, PvbScheduledReceipts, BallValveLot, BallValveSS, BallValveScheduledReceipts, BallValveLT, BallValveBalanceList, BallValveMultiplier, BallValvePlannedReceipts)
 
-                            //Level 1
-                            const BoltLT = 7
-                            const BoltMultiplier = 3
-                            var BoltScheduledReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                            var BoltBalanceList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                            var BoltPlannedReceipts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                            individualComponentMRP(BoltOnHand, PvbScheduledReceipts, BoltLot, BoltSS, BoltScheduledReceipts, BoltLT, BoltBalanceList, BoltMultiplier, BoltPlannedReceipts)
 
                             return (
                                 <div>
@@ -563,7 +689,7 @@ export default function Mrp() {
                                         <div className="featured">
                                             <div className='featuredItem3'>
                                                 <div className={classes.sticky2}>
-                                                    <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Poppet Assembly </span><b><i>721-310</i></b>
+                                                    <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Poppet Assembly </span><b><i>721-300</i></b>
                                                     <Switch
                                                         size="small"
                                                         color="secondary"
@@ -660,7 +786,7 @@ export default function Mrp() {
                                                         {/* Level 2: Load Nut MRP records (from Poppet Assembly) */}
                                                         <div className='featuredItem4'>
                                                             <div className={classes.sticky2}>
-                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Load Nut & Guide </span><b><i>721-90</i></b><br />
+                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Load Nut, 1/4" - 2" Brass </span><b><i>721-90</i></b><br />
                                                                 <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
                                                                     Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={PoppetNutLot} onInput={e => setPoppetNutLot(e.target.value)} /><br />
                                                                     Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={PoppetNutSS} onInput={e => setPoppetNutSS(e.target.value)} /><br />
@@ -725,7 +851,7 @@ export default function Mrp() {
                                                         {/* Level 2: Load washer MRP records (from Poppet Assembly) */}
                                                         <div className='featuredItem4'>
                                                             <div className={classes.sticky2}>
-                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Load Washer </span><b><i>721-80</i></b><br />
+                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Load Washer, 1/2" - 1" 720 </span><b><i>721-80</i></b><br />
                                                                 <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
                                                                     Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={PoppetWasherLot} onInput={e => setPoppetWasherLot(e.target.value)} /><br />
                                                                     Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={PoppetWasherSS} onInput={e => setPoppetWasherSS(e.target.value)} /><br />
@@ -790,7 +916,7 @@ export default function Mrp() {
                                                         {/* Level 2: Poppet Disc MRP records (from Poppet Assembly) */}
                                                         <div className='featuredItem4'>
                                                             <div className={classes.sticky2}>
-                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Disc Upper </span><b><i>721A-34</i></b><br />
+                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Upper Disc, 1/2" - 1" 720 </span><b><i>721A-34</i></b><br />
                                                                 <div style={{ fontSize: '75%', paddingLeft: 20, }}><i>
                                                                     Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={PoppetDiscLot} onInput={e => setPoppetDiscLot(e.target.value)} /><br />
                                                                     Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={PoppetDiscSS} onInput={e => setPoppetDiscSS(e.target.value)} /><br />
@@ -855,7 +981,7 @@ export default function Mrp() {
                                                         {/* Level 2: Poppet MRP records (from Poppet Assembly) */}
                                                         <div className='featuredItem4'>
                                                             <div className={classes.sticky2}>
-                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Poppet </span><b><i>721-30</i></b><br />
+                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Poppet, 1/2" - 1" 720 </span><b><i>721-30</i></b><br />
                                                                 <div style={{ fontSize: '75%', paddingLeft: 20, }}><i>
                                                                     Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={PoppetPartLot} onInput={e => setPoppetPartLot(e.target.value)} /><br />
                                                                     Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={PoppetPartSS} onInput={e => setPoppetPartSS(e.target.value)} /><br />
@@ -921,7 +1047,596 @@ export default function Mrp() {
                                                 )
                                             }
                                         })()}
+                                        {/* Level 2: Spider Assembly MRP records */}
+                                        <div className="featured">
+                                            <div className='featuredItem3'>
+                                                <div className={classes.sticky2}>
+                                                    <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Spider Assembly </span><b><i>721-310</i></b>
+                                                    <Switch
+                                                        size="small"
+                                                        color="secondary"
+                                                        checked={SpiderState}
+                                                        sx={{
+                                                            marginLeft: '10px'
+                                                        }}
+                                                        onClick={() => {
+                                                            setSpiderState(current => !current)
+                                                            console.log(SpiderState)
+                                                        }}
+                                                    /><br />
+                                                    <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
+                                                        Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderLot} onInput={e => setSpiderLot(e.target.value)} /><br />
+                                                        Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderSS} onInput={e => setSpiderSS(e.target.value)} /><br />
+                                                        Lead Time = <b>{PoppetLT} week(s)</b></i>
+                                                    </div>
 
+                                                </div>
+                                                <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                                                            {dateInWeeks.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
+                                                            {PvbScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    {/*
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Scheduled Receipts</b></TableCell>
+                                                            {PoppetScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}></TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    */}
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
+                                                            {SpiderPlannedReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
+                                                                <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderOnHand} onInput={e => setSpiderOnHand(e.target.value)} /></i></span>
+                                                            </TableCell>
+                                                            {SpiderBalanceList.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Order Releases </b></TableCell>
+                                                            {SpiderScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
+                                        </div>
+                                        {/* <Switch
+                                    size="small"
+                                    color="secondary"
+                                    checked={PoppetState}
+                                    sx={{
+                                        marginLeft:'30px'
+                                    }}
+                                    onClick={() => {
+                                        setPoppetState(current => !current)
+                                        console.log(PoppetState)
+                                    }}
+                                /><span style={{fontSize: '75%'}}><i>Toggle Level 2</i></span> */}
+
+                                        {(() => {
+                                            if (SpiderState === true) {
+                                                //Level 2: Spider Assembly
+                                                return (
+                                                    <div>
+                                                        {/* Level 2: Load Nut MRP records (from Spider Assembly) */}
+                                                        <div className='featuredItem4'>
+                                                            <div className={classes.sticky2}>
+                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Bolt 8-32 x .620 Pan HD SS </span><b><i>721-11A</i></b><br />
+                                                                <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
+                                                                    Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderBoltLot} onInput={e => setSpiderBoltLot(e.target.value)} /><br />
+                                                                    Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderBoltSS} onInput={e => setSpiderBoltSS(e.target.value)} /><br />
+                                                                    Lead Time = <b>{SpiderBoltLT} week(s)</b></i>
+                                                                </div>
+                                                            </div>
+                                                            <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
+                                                                <TableHead>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                                                                        {dateInWeeks.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableHead>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
+                                                                        {SpiderScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                {/*
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Scheduled Receipts</b></TableCell>
+                                                                        {PoppetNutScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}></TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                */}
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
+                                                                        {SpiderBoltPlannedReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
+                                                                            <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderBoltOnHand} onInput={e => setSpiderBoltOnHand(e.target.value)} /></i></span>
+                                                                        </TableCell>
+                                                                        {SpiderBoltBalanceList.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Planned Order Releases </b></TableCell>
+                                                                        {SpiderBoltScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                            </Table>
+                                                        </div>
+                                                        {/* Level 2: Lower Disc MRP records (from Spider Assembly) */}
+                                                        <div className='featuredItem4'>
+                                                            <div className={classes.sticky2}>
+                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Lower Disc, 1/2" - 1" 720 </span><b><i>721B-34</i></b><br />
+                                                                <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
+                                                                    Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderDiscLot} onInput={e => setSpiderDiscLot(e.target.value)} /><br />
+                                                                    Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderDiscSS} onInput={e => setSpiderDiscSS(e.target.value)} /><br />
+                                                                    Lead Time = <b>{SpiderDiscLT} week(s)</b></i>
+                                                                </div>
+                                                            </div>
+                                                            <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
+                                                                <TableHead>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                                                                        {dateInWeeks.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableHead>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
+                                                                        {SpiderScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                {/*
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Scheduled Receipts</b></TableCell>
+                                                                        {PoppetWasherScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}></TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                */}
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
+                                                                        {SpiderDiscPlannedReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
+                                                                            <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderDiscOnHand} onInput={e => setSpiderDiscOnHand(e.target.value)} /></i></span>
+                                                                        </TableCell>
+                                                                        {SpiderDiscBalanceList.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Planned Order Releases </b></TableCell>
+                                                                        {SpiderDiscScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                            </Table>
+                                                        </div>
+                                                        {/* Level 2: Spider Part MRP records (from Spider Assembly) */}
+                                                        <div className='featuredItem4'>
+                                                            <div className={classes.sticky2}>
+                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Spider, 1/2" - 1" 720 </span><b><i>721-31</i></b><br />
+                                                                <div style={{ fontSize: '75%', paddingLeft: 20, }}><i>
+                                                                    Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderPartLot} onInput={e => setSpiderPartLot(e.target.value)} /><br />
+                                                                    Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderPartSS} onInput={e => setSpiderPartSS(e.target.value)} /><br />
+                                                                    Lead Time = <b>{SpiderPartLT} week(s)</b></i>
+                                                                </div>
+                                                            </div>
+                                                            <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
+                                                                <TableHead>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                                                                        {dateInWeeks.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableHead>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
+                                                                        {SpiderScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                {/*
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Scheduled Receipts</b></TableCell>
+                                                                        {PoppetDiscScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}></TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                */}
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
+                                                                        {SpiderPartPlannedReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
+                                                                            <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderPartOnHand} onInput={e => setSpiderPartOnHand(e.target.value)} /></i></span>
+                                                                        </TableCell>
+                                                                        {SpiderPartBalanceList.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Planned Order Releases </b></TableCell>
+                                                                        {SpiderPartScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                            </Table>
+                                                        </div>
+                                                        {/* Level 2: Nut MRP records (from Spider Assembly) */}
+                                                        <div className='featuredItem4'>
+                                                            <div className={classes.sticky2}>
+                                                                <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Nut, 8-32 x .620 Pan HD SS </span><b><i>721-9A</i></b><br />
+                                                                <div style={{ fontSize: '75%', paddingLeft: 20, }}><i>
+                                                                    Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderNutLot} onInput={e => setSpiderNutLot(e.target.value)} /><br />
+                                                                    Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderNutSS} onInput={e => setSpiderNutSS(e.target.value)} /><br />
+                                                                    Lead Time = <b>{SpiderNutLT} week(s)</b></i>
+                                                                </div>
+                                                            </div>
+                                                            <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
+                                                                <TableHead>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                                                                        {dateInWeeks.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableHead>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
+                                                                        {SpiderScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                {/*
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Scheduled Receipts</b></TableCell>
+                                                                        {PoppetPartScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}></TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                */}
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
+                                                                        {SpiderNutPlannedReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
+                                                                            <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpiderNutOnHand} onInput={e => setSpiderNutOnHand(e.target.value)} /></i></span>
+                                                                        </TableCell>
+                                                                        {SpiderNutBalanceList.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell className={classes.sticky}><b>Planned Order Releases </b></TableCell>
+                                                                        {SpiderNutScheduledReceipts.map((item, index) => {
+                                                                            return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                                        })}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                            </Table>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })()}
+                                        {/* Level 1: Bolt MRP records*/}
+                                        <div className="featured">
+                                            <div className='featuredItem3'>
+                                                <div className={classes.sticky2}>
+                                                    <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Bolt, 8-32 x 3/8 Fil. SS </span><b><i>721-11</i></b><br />
+                                                    <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
+                                                        Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={BoltLot} onInput={e => setBoltLot(e.target.value)} /><br />
+                                                        Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={BoltSS} onInput={e => setBoltSS(e.target.value)} /><br />
+                                                        Lead Time = <b>{BoltLT} week(s)</b></i>
+                                                    </div>
+                                                </div>
+                                                <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                                                            {dateInWeeks.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
+                                                            {PvbScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{3 * item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
+                                                            {BoltPlannedReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
+                                                                <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={BoltOnHand} onInput={e => setBoltOnHand(e.target.value)} /></i></span>
+                                                            </TableCell>
+                                                            {BoltBalanceList.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Order Releases</b></TableCell>
+                                                            {BoltScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
+                                        </div>
+                                        {/* Level 1: Canopy MRP records*/}
+                                        <div className="featured">
+                                            <div className='featuredItem3'>
+                                                <div className={classes.sticky2}>
+                                                    <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Canopy, 1/2" - 1" 720 </span><b><i>721-3</i></b><br />
+                                                    <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
+                                                        Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={CanopyLot} onInput={e => setCanopyLot(e.target.value)} /><br />
+                                                        Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={CanopySS} onInput={e => setCanopySS(e.target.value)} /><br />
+                                                        Lead Time = <b>{CanopyLT} week(s)</b></i>
+                                                    </div>
+                                                </div>
+                                                <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                                                            {dateInWeeks.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
+                                                            {PvbScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{3 * item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
+                                                            {CanopyPlannedReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
+                                                                <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={CanopyOnHand} onInput={e => setCanopyOnHand(e.target.value)} /></i></span>
+                                                            </TableCell>
+                                                            {CanopyBalanceList.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Order Releases</b></TableCell>
+                                                            {CanopyScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
+                                        </div>
+                                        {/* Level 1: Bonnet MRP records*/}
+                                        <div className="featured">
+                                            <div className='featuredItem3'>
+                                                <div className={classes.sticky2}>
+                                                    <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Bonnet, 1/2" - 1" 720 </span><b><i>721-20</i></b><br />
+                                                    <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
+                                                        Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={BonnetLot} onInput={e => setBonnetLot(e.target.value)} /><br />
+                                                        Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={BonnetSS} onInput={e => setBonnetSS(e.target.value)} /><br />
+                                                        Lead Time = <b>{BonnetLT} week(s)</b></i>
+                                                    </div>
+                                                </div>
+                                                <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                                                            {dateInWeeks.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
+                                                            {PvbScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{3 * item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
+                                                            {BonnetPlannedReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
+                                                                <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={BonnetOnHand} onInput={e => setBonnetOnHand(e.target.value)} /></i></span>
+                                                            </TableCell>
+                                                            {BonnetBalanceList.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Order Releases</b></TableCell>
+                                                            {BonnetScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
+                                        </div>
+                                        {/* Level 1: Plastic Washer MRP records*/}
+                                        <div className="featured">
+                                            <div className='featuredItem3'>
+                                                <div className={classes.sticky2}>
+                                                    <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Plastic Washer, 1/2" - 1" 720 </span><b><i>721A-12</i></b><br />
+                                                    <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
+                                                        Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={PlasticWasherLot} onInput={e => setPlasticWasherLot(e.target.value)} /><br />
+                                                        Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={PlasticWasherSS} onInput={e => setPlasticWasherSS(e.target.value)} /><br />
+                                                        Lead Time = <b>{PlasticWasherLT} week(s)</b></i>
+                                                    </div>
+                                                </div>
+                                                <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                                                            {dateInWeeks.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
+                                                            {PvbScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{3 * item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
+                                                            {PlasticWasherPlannedReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
+                                                                <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={PlasticWasherOnHand} onInput={e => setPlasticWasherOnHand(e.target.value)} /></i></span>
+                                                            </TableCell>
+                                                            {PlasticWasherBalanceList.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Order Releases</b></TableCell>
+                                                            {PlasticWasherScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
+                                        </div>
                                         {/* Level 1: O-ring MRP records*/}
                                         <div className="featured">
                                             <div className='featuredItem3'>
@@ -982,6 +1697,120 @@ export default function Mrp() {
                                                         <TableRow>
                                                             <TableCell className={classes.sticky}><b>Planned Order Releases </b></TableCell>
                                                             {ORingScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
+                                        </div>
+                                        {/* Level 1: Spring MRP records*/}
+                                        <div className="featured">
+                                            <div className='featuredItem3'>
+                                                <div className={classes.sticky2}>
+                                                    <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Spring, 1/2" - 1" 720 </span><b><i>721-33</i></b><br />
+                                                    <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
+                                                        Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpringLot} onInput={e => setSpringLot(e.target.value)} /><br />
+                                                        Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpringSS} onInput={e => setSpringSS(e.target.value)} /><br />
+                                                        Lead Time = <b>{SpringLT} week(s)</b></i>
+                                                    </div>
+                                                </div>
+                                                <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                                                            {dateInWeeks.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
+                                                            {PvbScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{3 * item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
+                                                            {SpringPlannedReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
+                                                                <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={SpringOnHand} onInput={e => setSpringOnHand(e.target.value)} /></i></span>
+                                                            </TableCell>
+                                                            {SpringBalanceList.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Order Releases</b></TableCell>
+                                                            {SpringScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </div>
+                                        </div>
+                                        {/* Level 1: TestCock MRP records*/}
+                                        <div className="featured">
+                                            <div className='featuredItem3'>
+                                                <div className={classes.sticky2}>
+                                                    <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Test Cock, 1/8" x 1/4" </span><b><i>18-860</i></b><br />
+                                                    <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
+                                                        Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={TestCockLot} onInput={e => setTestCockLot(e.target.value)} /><br />
+                                                        Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={TestCockSS} onInput={e => setTestCockSS(e.target.value)} /><br />
+                                                        Lead Time = <b>{TestCockLT} week(s)</b></i>
+                                                    </div>
+                                                </div>
+                                                <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Date</b></TableCell>
+                                                            {dateInWeeks.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
+                                                            {PvbScheduledReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{3 * item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
+                                                            {TestCockPlannedReceipts.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
+                                                                <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={TestCockOnHand} onInput={e => setTestCockOnHand(e.target.value)} /></i></span>
+                                                            </TableCell>
+                                                            {TestCockBalanceList.map((item, index) => {
+                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                                                            })}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            <TableCell className={classes.sticky}><b>Planned Order Releases</b></TableCell>
+                                                            {TestCockScheduledReceipts.map((item, index) => {
                                                                 return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
                                                             })}
                                                         </TableRow>
@@ -1055,72 +1884,7 @@ export default function Mrp() {
                                                 </Table>
                                             </div>
                                         </div>
-                                        <div className="featured">
-                                            <div className='featuredItem3'>
-                                                <div className={classes.sticky2}>
-                                                    <span style={{ fontSize: 20, paddingLeft: 20, paddingTop: 20 }}>Bolt, 8-32 x 3/8 Fil. SS </span><b><i>721-11</i></b><br />
-                                                    <div style={{ fontSize: '75%', paddingLeft: 20 }}><i>
-                                                        Lot Size = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={BoltLot} onInput={e => setBoltLot(e.target.value)} /><br />
-                                                        Safety Stock = <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={BoltSS} onInput={e => setBoltSS(e.target.value)} /><br />
-                                                        Lead Time = <b>{BoltLT} week(s)</b></i>
-                                                    </div>
-                                                </div>
-                                                <Table sx={{ width: "100%" }} aria-label="simple table" style={{ tableLayout: "fixed" }}>
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell className={classes.sticky}><b>Date</b></TableCell>
-                                                            {dateInWeeks.map((item, index) => {
-                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
-                                                            })}
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        <TableRow>
-                                                            <TableCell className={classes.sticky}><b>Gross Requirement</b></TableCell>
-                                                            {PvbScheduledReceipts.map((item, index) => {
-                                                                return <TableCell className={classes.cellStyles} key={index}>{3 * item}</TableCell>
-                                                            })}
-                                                        </TableRow>
-                                                    </TableBody>
-                                                    {/*
-                                                    <TableBody>
-                                                        <TableRow>
-                                                            <TableCell className={classes.sticky}><b>Scheduled Receipts</b></TableCell>
-                                                            {demandInWeeks.map((item, index) => {
-                                                                return <TableCell className={classes.cellStyles} key={index}></TableCell>
-                                                            })}
-                                                        </TableRow>
-                                                    </TableBody>
-                                                    */}
-                                                    <TableBody>
-                                                        <TableRow>
-                                                            <TableCell className={classes.sticky}><b>Planned Receipts</b></TableCell>
-                                                            {BoltPlannedReceipts.map((item, index) => {
-                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
-                                                            })}
-                                                        </TableRow>
-                                                    </TableBody>
-                                                    <TableBody>
-                                                        <TableRow>
-                                                            <TableCell className={classes.sticky}><b>Projected Available Balance </b><br />
-                                                                <span style={{ fontSize: '75%' }}><i>On-Hand: <input style={{ border: '#FFFFFF', width: '60px', fontWeight: 'bold' }} type="number" value={BoltOnHand} onInput={e => setBoltOnHand(e.target.value)} /></i></span>
-                                                            </TableCell>
-                                                            {BoltBalanceList.map((item, index) => {
-                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
-                                                            })}
-                                                        </TableRow>
-                                                    </TableBody>
-                                                    <TableBody>
-                                                        <TableRow>
-                                                            <TableCell className={classes.sticky}><b>Planned Order Releases</b></TableCell>
-                                                            {BoltScheduledReceipts.map((item, index) => {
-                                                                return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
-                                                            })}
-                                                        </TableRow>
-                                                    </TableBody>
-                                                </Table>
-                                            </div>
-                                        </div>
+
                                     </Box>
                                 </div>
                             )
