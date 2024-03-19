@@ -178,18 +178,20 @@ export default function Mrp() {
     const StyledNodeTitle = styled.div`
         border-radius: 5px;
         display: inline-block;
-        border: 1px solid purple;
+        border: 3px solid purple;
         border-width: auto;
-        font-size: 12px;
+        font-size: 16px;
         font-weight: bold;
+        padding: 0.5rem 0.5rem;
     `;
 
     const StyledNode = styled.div`
         border-radius: 5px;
         display: inline-block;
-        border: 1px solid purple;
+        border: 2px solid purple;
         border-width: auto;
-        font-size: 12px;
+        font-size: 14px;
+        padding: 0.5rem 0.5rem;
     `;
 
     const classes = useStyles();
@@ -224,6 +226,7 @@ export default function Mrp() {
                                             <Table sx={{ minWidth: "100%", maxWidth: "100%" }} stickyHeader aria-label="sticky table">
                                                 <TableHead>
                                                     <span className="featuredTitle2"><b>Bill of Material</b></span>
+                                                    {/*
                                                     <Select
                                                         sx={{ width: 'auto', marginLeft: 2.5 }}
                                                         id="demo-simple-select"
@@ -234,6 +237,7 @@ export default function Mrp() {
                                                             return <MenuItem value={index}>{item}</MenuItem>
                                                         })}
                                                     </Select>
+                                                    */}
                                                     <TableRow>
                                                         <TableCell align="left"><b>Part No.</b></TableCell>
                                                         <TableCell><b>Quantity Required</b></TableCell>
@@ -244,12 +248,12 @@ export default function Mrp() {
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                     >
                                                         <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            Poppet Assembly, 721-310
+                                                            Poppet Assembly, 721-300
                                                             <Box sx={{ ml: '50px', fontFamily: 'Arial', fontStyle: 'italic' }}>
-                                                                Load Nut & Guide, 721-90<br />
-                                                                Load Washer, 721-80<br />
-                                                                Disc Upper, 721A-34<br />
-                                                                Poppet, 721-30<br />
+                                                                Load Nut, 1/4" - 2" Brass, 721-90<br />
+                                                                Load Washer, 1/2" - 1" 720, 721-80<br />
+                                                                Upper Disc, 1/2" - 1" 720, 721A-34<br />
+                                                                Poppet, 1/2" - 1" 720, 721-30<br />
                                                             </Box>
                                                         </TableCell>
                                                         <TableCell style={{ width: '50%' }}>
@@ -268,10 +272,10 @@ export default function Mrp() {
                                                         <TableCell component="th" scope="row" style={{ width: '50%' }}>
                                                             Spider Assembly, 721-310
                                                             <Box sx={{ ml: '50px', fontFamily: 'Arial', fontStyle: 'italic' }}>
-                                                                Screw, 721-11A<br />
-                                                                Lower Disc, 721B-34<br />
-                                                                Guide Spider, 721-31<br />
-                                                                Hex Nut, 721-9A<br />
+                                                                Bolt 8-32 x .620 Pan HD SS, 721-11A<br />
+                                                                Lower Disc, 1/2" - 1" 720, 721B-34<br />
+                                                                Spider, 1/2" - 1" 720, 721-31<br />
+                                                                Nut, 8-32 x .620 Pan HD SS, 721-9A<br />
                                                             </Box>
                                                         </TableCell>
                                                         <TableCell style={{ width: '50%' }}>
@@ -288,7 +292,7 @@ export default function Mrp() {
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                     >
                                                         <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            Canopy Screw, 721-11
+                                                            Bolt, 8-32 x 3/8 Fil. S, 721-11
                                                         </TableCell>
                                                         <TableCell style={{ width: '50%' }}>
                                                             {noOfParts * 3}
@@ -298,7 +302,7 @@ export default function Mrp() {
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                     >
                                                         <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            Canopy, 721-3
+                                                            Canopy, 1/2" - 1" 720, 721-3
                                                         </TableCell>
                                                         <TableCell style={{ width: '50%' }}>
                                                             {noOfParts}
@@ -308,7 +312,7 @@ export default function Mrp() {
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                     >
                                                         <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            Bonnet, 721-20
+                                                            Bonnet, 1/2" - 1" 720, 721-20
                                                         </TableCell>
                                                         <TableCell style={{ width: '50%' }}>
                                                             {noOfParts}
@@ -318,7 +322,7 @@ export default function Mrp() {
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                     >
                                                         <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            Plastic Washer, 721A-12
+                                                            Plastic Washer, 1/2" - 1" 720, 721A-12
                                                         </TableCell>
                                                         <TableCell style={{ width: '50%' }}>
                                                             {noOfParts}
@@ -328,7 +332,7 @@ export default function Mrp() {
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                     >
                                                         <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            O-Ring, WK-138N
+                                                            O-Ring, FDA, 138N
                                                         </TableCell>
                                                         <TableCell style={{ width: '50%' }}>
                                                             {noOfParts}
@@ -338,7 +342,7 @@ export default function Mrp() {
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                     >
                                                         <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            Spring, 721-33
+                                                            Spring, 1/2" - 1" 720, 721-33
                                                         </TableCell>
                                                         <TableCell style={{ width: '50%' }}>
                                                             {noOfParts}
@@ -348,7 +352,7 @@ export default function Mrp() {
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                     >
                                                         <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            Test Cock, 18-860XL
+                                                            Test Cock, 1/8" x 1/4", 18-860
                                                         </TableCell>
                                                         <TableCell style={{ width: '50%' }}>
                                                             {noOfParts * 2}
@@ -358,27 +362,7 @@ export default function Mrp() {
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                                     >
                                                         <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            Ball Valve 1/2" Tap, 12-850T
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '50%' }}>
-                                                            {noOfParts * 2}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                    <TableRow
-                                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                    >
-                                                        <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            Ball Valve 3/4" Tap, 34-850T
-                                                        </TableCell>
-                                                        <TableCell style={{ width: '50%' }}>
-                                                            {noOfParts * 2}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                    <TableRow
-                                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                    >
-                                                        <TableCell component="th" scope="row" style={{ width: '50%' }}>
-                                                            Ball Valve 1" Tap, 1-850T
+                                                            Ball Valve 3/4", 34-850
                                                         </TableCell>
                                                         <TableCell style={{ width: '50%' }}>
                                                             {noOfParts * 2}
@@ -407,33 +391,31 @@ export default function Mrp() {
                                             <span className="featuredTitle"><b>Product Structure Diagram</b></span>
                                             <div className="TreePositioning">
                                                 <Tree
-                                                    lineWidth={'2px'}
+                                                    lineWidth={'4px'}
                                                     lineColor={'purple'}
                                                     lineBorderRadius={'5px'}
-                                                    label={<StyledNodeTitle>Pressure Vacuum Breaker 34-720A :{'\n' + noOfParts}</StyledNodeTitle>}
+                                                    label={<StyledNodeTitle>Pressure Vacuum Breaker 34-720A</StyledNodeTitle>}
                                                 >
-                                                    <TreeNode label={<StyledNode>Canopy Screw{'\n' + 3 * noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode>Canopy{'\n' + noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode>Bonnet{'\n' + noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode>Plastic Washer{'\n' + noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode>O-Ring{'\n' + noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode>Poppet Assembly{'\n' + noOfParts}</StyledNode>}>
-                                                        <TreeNode label={<StyledNode>Load Nut & Guide{'\n' + noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode>Load Washer{'\n' + noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode>Disc Upper{'\n' + noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode>Poppet{'\n' + noOfParts}</StyledNode>} />
+                                                    <TreeNode label={<StyledNode><b>721-300</b><br></br>{noOfParts}</StyledNode>}>
+                                                        <TreeNode label={<StyledNode><b>721-90</b><br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721-80</b><br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721A-34</b><br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721-30</b><br></br>{noOfParts}</StyledNode>} />
                                                     </TreeNode>
-                                                    <TreeNode label={<StyledNode>Spring{'\n' + noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode>Spider Assembly{'\n' + noOfParts}</StyledNode>}>
-                                                        <TreeNode label={<StyledNode>Screw{'\n' + noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode>Lower Disc{'\n' + noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode>Guide Spider{'\n' + noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode>Hex Nut{'\n' + noOfParts}</StyledNode>} />
+                                                    <TreeNode label={<StyledNode><b>721-310</b><br></br>{noOfParts}</StyledNode>}>
+                                                        <TreeNode label={<StyledNode><b>721-11A</b><br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721B-34</b><br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721-31</b><br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721-9A</b><br></br>{noOfParts}</StyledNode>} />
                                                     </TreeNode>
-                                                    <TreeNode label={<StyledNode>Test Cock{'\n' + 2 * noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode>Ball Valve 1/2" Tap{'\n' + 2 * noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode>Ball Valve 3/4" Tap{'\n' + 2 * noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode>Ball Valve 1" Tap{'\n' + 2 * noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>721-11</b><br></br>{3 * noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>721-3</b><br></br>{noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>721-20</b><br></br>{noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>721A-12</b><br></br>{noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>138N</b><br></br>{noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>721-33</b><br></br>{noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>18-860</b><br></br>{2 * noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>34-850</b><br></br>{2 * noOfParts}</StyledNode>}></TreeNode>
                                                 </Tree>
                                             </div>
                                         </div>
