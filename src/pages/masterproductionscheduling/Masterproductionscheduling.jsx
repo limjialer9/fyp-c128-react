@@ -70,6 +70,7 @@ export default function Masterproductionscheduling() {
   const { overridevalue13 } = useContext(UserContext);
   const { overridevalue14 } = useContext(UserContext);
   var { dateList } = useContext(UserContext);
+  const indexList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const { MPSdata, setMPSdata } = useContext(UserContext);
   const { dataAPI, loading } = useContext(UserContext)
   const { dataAPI2 } = useFetch2()
@@ -332,7 +333,7 @@ export default function Masterproductionscheduling() {
         balance = Number(valueSlider)
 
         for (let i = 0; i < 14; i++) {
-          balance = balance - LRVal[i]
+          balance = balance - Math.max(LRVal[i], delivery_data[i])
           if (balance < Number(valueSliderSS)) {
             projected_balance.push(Number(valueSliderSS))
             mps_data.push(Number(valueSliderSS) - balance)
@@ -356,7 +357,7 @@ export default function Masterproductionscheduling() {
         balance = valueSlider
 
         for (let i = 0; i < 4; i++) {
-          balance = balance - LRVal[i] + mps_data[i]
+          balance = balance - Math.max(LRVal[i], delivery_data[i]) + mps_data[i]
           if (balance < Number(valueSliderSS)) {
             projected_balance.push(Number(valueSliderSS))
             balance = Number(valueSliderSS)
@@ -366,7 +367,7 @@ export default function Masterproductionscheduling() {
 
         }
         for (let i = 4; i < 14; i++) {
-          balance = balance - LRVal[i]
+          balance = balance - Math.max(LRVal[i], delivery_data[i])
           if (balance < Number(valueSliderSS)) {
             projected_balance.push(Number(valueSliderSS))
             mps_data.push(Number(valueSliderSS) - balance)
@@ -391,12 +392,12 @@ export default function Masterproductionscheduling() {
 
         for (let i = 0; i < LRVal.length; i++) {
           level_total += LRVal[i]
-          level_total += Number(valueSliderSS)
+          //level_total += Number(valueSliderSS)
         }
         var level_avg = Math.round(level_total / 14)
         balance = Number(valueSlider)
         for (let j = 0; j < LRVal.length; j++) {
-          balance = balance + (level_avg - LRVal[j])
+          balance = balance + (level_avg - Math.max(LRVal[j], delivery_data[j]))
           projected_balance.push(balance)
           mps_data.push(level_avg)
         }
@@ -413,13 +414,15 @@ export default function Masterproductionscheduling() {
         mps_data.push(mpsFour)
         for (let i = 0; i < LRVal.length; i++) {
           level_total += LRVal[i]
-          level_total += Number(valueSliderSS)
+          //level_total += Number(valueSliderSS)
         }
         level_avg = Math.round(level_total / 14)
         balance = Number(valueSlider)
         for (let j = 0; j < LRVal.length; j++) {
-          balance = balance + (level_avg - LRVal[j])
+          balance = balance + (level_avg - Math.max(LRVal[j], delivery_data[j]))
           projected_balance.push(balance)
+        }
+        for (let k = 4; k < LRVal.length; k++) {
           mps_data.push(level_avg)
         }
       }
@@ -747,6 +750,14 @@ export default function Masterproductionscheduling() {
                     <TableHead>
                       <TableRow>
                         <TableCell className={classes.sticky}>
+
+                        </TableCell>
+                        {indexList.map((item, index) => {
+                          return <TableCell className={classes.cellStyles} key={index}>{item}</TableCell>
+                        })}
+                      </TableRow>
+                      <TableRow>
+                        <TableCell className={classes.sticky}>
                           <b>Date</b>
                         </TableCell>
                         {removedDateList.map((item, index) => {
@@ -863,7 +874,7 @@ export default function Masterproductionscheduling() {
                   {/*New addition for safety stock*/}
                   <div className='featuredItemNoShadow'>
                     <div className='featuredTitle'>
-                      Safety Stock: <b>{valueSliderSS}</b>
+                      Safety Stock:
                       <div className='featuredItemNoShadow'>
                         <TextField
                           required
@@ -883,7 +894,7 @@ export default function Masterproductionscheduling() {
                 <div className='featured'>
                   <div className='featuredItemNoShadow'>
                     <div className='featuredTitle'>
-                      Initial On-Hand Balance: <b>{valueSlider}</b>
+                      Initial On-Hand Balance:
                       <div className='featuredItemNoShadow'>
                         <TextField
                           required
@@ -896,7 +907,7 @@ export default function Masterproductionscheduling() {
                   </div>
                   <div className='featuredItemNoShadow'>
                     <div className='featuredTitle'>
-                      Safety Stock: <b>{valueSliderSS}</b>
+                      Safety Stock:
                       <div className='featuredItemNoShadow'>
                         <TextField
                           required

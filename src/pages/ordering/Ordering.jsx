@@ -72,19 +72,19 @@ export default function Ordering() {
     const [inputValueCountry, setInputValueCountry] = React.useState(optionsCountries[0]);
     const [valueItem, setValueItem] = React.useState(optionsItem[0]);
     const [inputValueItem, setInputValueItem] = React.useState(optionsCountries[0]);
-    const [password, setPassword] = React.useState(null);
-    const masterPassword = '1'
+    //const [password, setPassword] = React.useState(null);
+    //const masterPassword = '123'
     const [ifFalse, setIfFalse] = React.useState(true)
 
     //If all fields are populated and password is correct, allow data to be pushed to API
     useEffect(() => {
-        if ((valueName && valueContactNumber && value1 && value2 && valueCountry && valuePostalCode && valueQuantity && valueItem !== (null || '')) && password === masterPassword) {
+        if ((valueName && valueContactNumber && value1 && value2 && valueCountry && valuePostalCode && valueQuantity && valueItem !== (null || ''))) {
             setIfFalse(false);
         }
         else {
             setIfFalse(true);
         }
-    }, [valueName, valueContactNumber, value1, value2, valueCountry, valuePostalCode, valueItem, valueQuantity, password])
+    }, [valueName, valueContactNumber, value1, value2, valueCountry, valuePostalCode, valueItem, valueQuantity])
 
     // HTML for page layout
     return (
@@ -230,13 +230,15 @@ export default function Ordering() {
                     </div>
                 </div>
                 <div className="submitButton">
+                    {/*
                     <TextField
                         id="outlined-password-input"
-                        label="Password"
+                        label="Password (123)"
                         type="password"
                         onChange={(event) => { setPassword(event.target.value) }}
                         size='small'
-                    />
+                    /> 
+                                */}
                     <Button variant="outlined" disabled={ifFalse} onClick={handleSubmit}>Submit</Button>
                 </div>
             </div>

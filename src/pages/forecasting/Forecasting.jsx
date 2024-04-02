@@ -66,7 +66,7 @@ export default function Forecasting() {
         forecast: maValue[0]
       }]
       for (let i = 0; i < keys.length; i++) {
-        data.push({ name: keys[i + 1], actual: values[i + 1], forecast: maValue[i] })
+        data.push({ name: keys[i + 1], actual: values[i + 1], forecast: Math.round(maValue[i]) })
       }
       console.log(data)
       var count = 0
@@ -101,7 +101,7 @@ export default function Forecasting() {
         }
       ]
       for (let i = 2; i < keys.length + 1; i++) {
-        data.push({ name: keys[i], actual: values[i], forecast: emaValue[i - 1] })
+        data.push({ name: keys[i], actual: values[i], forecast: Math.round(emaValue[i - 1]) })
       }
       console.log(data)
       count = 0
@@ -151,7 +151,7 @@ export default function Forecasting() {
         }
       ]
       for (let i = 3; i < keys.length + 1; i++) {
-        data.push({ name: keys[i], actual: values[i], forecast: desF[i] })
+        data.push({ name: keys[i], actual: Math.round(values[i]), forecast: Math.round(desF[i]) })
       }
 
       count = 0
@@ -308,7 +308,7 @@ export default function Forecasting() {
                           value={alpha}
                           onChange={changeAlphaSlider}
                         />
-                        Adjust Beta value: {beta}
+                        Adjust β value: {beta}
                         <Slider
                           size="small"
                           step={0.01}

@@ -16,8 +16,8 @@ import { Box } from '@mui/material';
 import { makeStyles } from "@material-ui/core/styles";
 import Switch from '@mui/material/Switch';
 
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+//import MenuItem from '@mui/material/MenuItem';
+//import Select from '@mui/material/Select';
 
 const useStyles = makeStyles({
     sticky: {
@@ -39,8 +39,6 @@ const useStyles = makeStyles({
     }
 });
 
-//Looks like a function to update planned receipts and order releases according to demand
-//Check if this works as intended
 function individualComponentMRP(onhand, demandList, lotsize, safetystock, orderList, leadtime, balanceList, multiplier, plannedReceipts) {
     //demandList is Gross requirement
     //orderList is Scheduled receipts / Planned Order Releases
@@ -48,10 +46,6 @@ function individualComponentMRP(onhand, demandList, lotsize, safetystock, orderL
     var balance = onhand
     //demandList is demandInWeeks for Level 0,
     //but is planned order releases of prior level for Level 1 and 2
-
-    //OK fuck this assclown has linked ScheduledReceipts to Planned Order Releases
-    //ScheduledReceipts is also linked to Scheduled Receipts, but does not show
-    //PlannedReceipts links to Planned Receipts. Does he mean Planned Order Releases?
 
     for (let i = 0; i < demandList.length; i++) {
         balance = balance - (multiplier * demandList[i])
@@ -62,7 +56,6 @@ function individualComponentMRP(onhand, demandList, lotsize, safetystock, orderL
         }
         balanceList[i] = Number(balance)
     }
-
 }
 
 export default function Mrp() {
@@ -157,14 +150,15 @@ export default function Mrp() {
     console.log(MPSdata)
 
     const removedDateList = dateList.slice(1);
-
-    const [period, setPeriod] = React.useState(0);
-    //const [noOfParts, setNoOfParts] = React.useState(MPSdata[parseInt(period)]);
     const noOfParts = 1;
-    const handleChange = (event) => {
+
+    //const [period, setPeriod] = React.useState(0);
+    //const [noOfParts, setNoOfParts] = React.useState(MPSdata[parseInt(period)]);
+    /*const handleChange = (event) => {
         setPeriod(event.target.value);
         //setNoOfParts(MPSdata[event.target.value]);
     };
+    */
 
     if (dataAPI !== null) {
         //var LRVal = [overridevalue1,overridevalue2,overridevalue3,overridevalue4,overridevalue5,overridevalue6,overridevalue7,overridevalue8,overridevalue9,overridevalue10,overridevalue11,overridevalue12,overridevalue13,overridevalue14]
@@ -396,26 +390,26 @@ export default function Mrp() {
                                                     lineBorderRadius={'5px'}
                                                     label={<StyledNodeTitle>Pressure Vacuum Breaker 34-720A</StyledNodeTitle>}
                                                 >
-                                                    <TreeNode label={<StyledNode><b>721-300</b><br></br>{noOfParts}</StyledNode>}>
-                                                        <TreeNode label={<StyledNode><b>721-90</b><br></br>{noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode><b>721-80</b><br></br>{noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode><b>721A-34</b><br></br>{noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode><b>721-30</b><br></br>{noOfParts}</StyledNode>} />
+                                                    <TreeNode label={<StyledNode><b>721-300</b><br></br>Poppet Assembly<br></br>{noOfParts}</StyledNode>}>
+                                                        <TreeNode label={<StyledNode><b>721-90</b><br></br>Load Nut<br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721-80</b><br></br>Load Washer<br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721A-34</b><br></br>Upper Disc<br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721-30</b><br></br>Poppet<br></br>{noOfParts}</StyledNode>} />
                                                     </TreeNode>
-                                                    <TreeNode label={<StyledNode><b>721-310</b><br></br>{noOfParts}</StyledNode>}>
-                                                        <TreeNode label={<StyledNode><b>721-11A</b><br></br>{noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode><b>721B-34</b><br></br>{noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode><b>721-31</b><br></br>{noOfParts}</StyledNode>} />
-                                                        <TreeNode label={<StyledNode><b>721-9A</b><br></br>{noOfParts}</StyledNode>} />
+                                                    <TreeNode label={<StyledNode><b>721-310</b><br></br>Spider Assembly<br></br>{noOfParts}</StyledNode>}>
+                                                        <TreeNode label={<StyledNode><b>721-11A</b><br></br>Bolt<br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721B-34</b><br></br>Lower Disc<br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721-31</b><br></br>Spider<br></br>{noOfParts}</StyledNode>} />
+                                                        <TreeNode label={<StyledNode><b>721-9A</b><br></br>Nut<br></br>{noOfParts}</StyledNode>} />
                                                     </TreeNode>
-                                                    <TreeNode label={<StyledNode><b>721-11</b><br></br>{3 * noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode><b>721-3</b><br></br>{noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode><b>721-20</b><br></br>{noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode><b>721A-12</b><br></br>{noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode><b>138N</b><br></br>{noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode><b>721-33</b><br></br>{noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode><b>18-860</b><br></br>{2 * noOfParts}</StyledNode>}></TreeNode>
-                                                    <TreeNode label={<StyledNode><b>34-850</b><br></br>{2 * noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>721-11</b><br></br>Bolt<br></br>{3 * noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>721-3</b><br></br>Canopy<br></br>{noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>721-20</b><br></br>Bonnet<br></br>{noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>721A-12</b><br></br>Plastic Washer<br></br>{noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>138N</b><br></br>O-Ring<br></br>{noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>721-33</b><br></br>Spring<br></br>{noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>18-860</b><br></br>Test Cock<br></br>{2 * noOfParts}</StyledNode>}></TreeNode>
+                                                    <TreeNode label={<StyledNode><b>34-850</b><br></br>Ball Valve<br></br>{2 * noOfParts}</StyledNode>}></TreeNode>
                                                 </Tree>
                                             </div>
                                         </div>
